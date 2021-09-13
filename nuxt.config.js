@@ -145,7 +145,7 @@ export default {
     '@nuxtjs/auth-next',
     // https://sitemap.nuxtjs.org/guide/setup
     '@nuxtjs/sitemap',
-    '~/modules/vueLayers',
+    '~/modules/vuelayers',
     '~/modules/autocomplete-vue'
   ],
 
