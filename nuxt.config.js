@@ -218,7 +218,7 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: process.env.API_BASE_URL,
+        url: `${process.env.API_BASE_URL}/api/v1/`,
         token: {
           type: 'Bearer',
           property: 'plainTextToken',
