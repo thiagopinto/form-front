@@ -218,7 +218,7 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: 'http://localhost:8000',
+        url: process.env.API_BASE_URL,
         token: {
           type: 'Bearer',
           property: 'plainTextToken',
