@@ -1,5 +1,5 @@
 export default {
-  globalName: 'CIATEN',
+  globalName: 'NEV',
   env: {
     apiUrl: process.env.API_BASE_URL,
     baseUrl: process.env.BASE_URL,
@@ -9,8 +9,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'CIATEN',
-    titleTemplate: 'CIATEN',
+    title: 'NEV',
+    titleTemplate: 'NEV',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -18,7 +18,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'CIATEN Centro de Inteligência em Agravos Tropicais Emergentes e Negligenciados'
+          'NEV Núcleo de Enventos vitais'
       },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },

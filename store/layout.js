@@ -1,5 +1,5 @@
 export const state = () => ({
-  title: 'CIATEN'
+  title: 'NEV'
 });
 
 export const mutations = {

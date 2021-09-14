@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     welcomeMessage() {
-      this.$emit('welcomeMessage', { message: 'Ativar usuário do CIATEN' });
+      this.$emit('welcomeMessage', { message: 'Ativar usuário' });
     },
     async activeUser() {
       try {
