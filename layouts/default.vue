@@ -2,7 +2,7 @@
   <div id="app">
     <notifications></notifications>
     <nuxtjs-bootstrap-sidebar
-      :initial-show.sync="initialShow"
+      :show.sync="initialShow"
       :links.sync="links"
       :fa="true"
       theme="paper-theme"

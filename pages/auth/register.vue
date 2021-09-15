@@ -64,7 +64,7 @@
                 <div class="form-group">
                   <label for="password-confirm">Confirm Password</label>
                   <input
-                    v-model="user.passwordConfirm"
+                    v-model="user.confirmed"
                     v-validate="'required|min:8|max:40'"
                     type="password"
                     class="form-control"

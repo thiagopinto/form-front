@@ -44,7 +44,7 @@
       }
     }
 
-    .sidebar-button.visible {
+    .sidebar-button {
       border: 1px solid $default-body-bg;
       color: $default-body-bg;
       background-color: $default-bg;
@@ -58,7 +58,7 @@
       svg {
       }
     }
-    .sidebar-button.hidden {
+    .sidebar-button {
     }
   }
 
@@ -130,6 +130,7 @@
       .nav-item.left {
         position: absolute;
         top: 0;
+        left: 5px;
       }
     }
   }
