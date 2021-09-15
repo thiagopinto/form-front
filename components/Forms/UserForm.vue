@@ -194,7 +194,7 @@
                           label="Confirme a senha"
                           :state="getValidationState(validationContext)"
                           placeholder="Ex: Senha@123"
-                          v-model="member.passwordConfirmation"
+                          v-model="member.password_confirmation"
                           aria-describedby="password_confirmation-live-feedback"
                         >
                         </b-form-input>
@@ -467,9 +467,9 @@ export default {
     },
     async checkEmail() {
       const response = await this.$axios.get(
-        `auth/users/check-email/?email=${this.member.email}`
+        `/users/check-email/${this.member.email}`
       );
-      const status = await response.data.status;
+      const status = await response.data;
 
       if (status) {
         this.notifyVue('top', 'center', 'Email já cadastrado', 'danger');

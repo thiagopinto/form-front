@@ -74,7 +74,7 @@
                             label="Confirme a senha"
                             :state="getValidationState(validationContext)"
                             placeholder="Ex: Senha@123"
-                            v-model="passwordConfirmation"
+                            v-model="password_confirmation"
                             aria-describedby="password_confirmation-live-feedback"
                           >
                           </b-form-input>
@@ -114,7 +114,7 @@ export default {
       token: null,
       email: null,
       password: null,
-      passwordConfirmation: null,
+      password_confirmation: null,
       show: false,
       url: 'reset-password/'
     };
@@ -139,7 +139,7 @@ export default {
             token: this.token,
             email: this.email,
             password: this.password,
-            password_confirmation: this.passwordConfirmation
+            password_confirmation: this.password_confirmation
           },
           {
             timeout: 30000
