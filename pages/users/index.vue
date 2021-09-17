@@ -164,7 +164,6 @@ export default {
       const response = await this.$axios.get(
         `user/${this.genPage()}${this.genSearch()}`
       );
-      console.log(response.data.data);
       this.listUsers = await response.data.data;
       this.totalRows = await response.data.total;
       this.isBusy = !this.isBusy;

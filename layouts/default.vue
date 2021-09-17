@@ -27,7 +27,6 @@
                   <em> Equipe </em>
                 </template>
                 <b-dropdown-item to="/users">Usuários</b-dropdown-item>
-                <b-dropdown-item to="/roles">Grupos</b-dropdown-item>
               </b-dropdown>
               <nuxt-link to="/auth/profile">
                 <div class="card d-inline text-danger">
