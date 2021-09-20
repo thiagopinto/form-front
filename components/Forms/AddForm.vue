@@ -87,6 +87,7 @@
   </div>
 </template>
 <script>
+import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
 export default {
   components: {},
   data() {
@@ -167,15 +168,37 @@ export default {
         const response = await this.$axios.post(`${this.url}`, this.form);
 
         this.$emit('addForm', { addForm: response.data });
+        this.notifyVue('top', 'center', 'Criado!', 'success');
         this.show = false;
+        this.form = {
+          id: null,
+          number: null,
+          name: null,
+          start: null,
+          end: null,
+          event_date: null,
+          range_number_start: null,
+          range_number_end: null,
+          cnes_code: null,
+          cnes_code_devolution: null
+        };
+        this.quant = null;
       } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+        this.notifyVue('top', 'center', error.response.data.message, 'danger');
+        console.log(error.response.data.message);
         this.show = false;
       }
+    },
+    notifyVue(verticalAlign, horizontalAlign, message, type) {
+      this.$notify({
+        component: NotificationTemplate,
+        icon: 'fas fa-exclamation-circle',
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        message: message,
+        timeout: 10000,
+        type: type
+      });
     }
   },
   watch: {

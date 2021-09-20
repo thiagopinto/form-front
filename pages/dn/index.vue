@@ -153,8 +153,10 @@
                     size="sm"
                     variant="light"
                     @click="cancel(data.item)"
+                    v-b-tooltip.hover
+                    title="Anular"
                   >
-                    Anular
+                    <font-awesome-icon :icon="['far', 'times-circle']" />
                   </b-button>
                   <receivement-form
                     :item="data.item"
@@ -164,7 +166,11 @@
                     @addForm="getForms"
                     variant="success"
                   >
-                    Preenchida
+                    <font-awesome-icon
+                      v-b-tooltip.hover
+                      title="Receber"
+                      :icon="['fas', 'edit']"
+                    />
                   </receivement-form>
 
                   <b-button
@@ -172,8 +178,20 @@
                     size="sm"
                     variant="danger"
                     @click="receipt(data.item)"
+                    v-b-tooltip.hover
+                    title="Imprimir Recibo"
                   >
-                    Gerar recibo
+                    <font-awesome-icon :icon="['fas', 'print']" />
+                  </b-button>
+                  <b-button
+                    class="m-0"
+                    size="sm"
+                    variant="danger"
+                    @click="reversal(data.item)"
+                    v-b-tooltip.hover
+                    title="Estorno"
+                  >
+                    <font-awesome-icon :icon="['fas', 'print']" />
                   </b-button>
                 </div>
                 <div class="row m-0 p-0" v-if="data.item.status == 4">
@@ -449,6 +467,20 @@ export default {
         item.status = 3;
         item._rowVariant = 'success';
         await this.$axios.patch(`${this.url}${item.id}`, item);
+        this.getForms();
+      } catch (error) {
+        const message =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+        console.log(message);
+      }
+    },
+    async reversal(item) {
+      try {
+        item.status = 1;
+        item._rowVariant = 'warning';
+        await this.$axios.patch(`${this.url}reversal/${item.id}`);
         this.getForms();
       } catch (error) {
         const message =

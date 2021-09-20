@@ -201,7 +201,9 @@ export default {
         'faHospital',
         'faGlobeAmericas',
         'faPlus',
-        'faPaperPlane'
+        'faPaperPlane',
+        'faPrint',
+        'faBackspace'
       ],
       regular: ['faTimesCircle', 'faFileAlt', 'faNewspaper', 'faPlusSquare', 'faChartBar', 'faEye']
     }

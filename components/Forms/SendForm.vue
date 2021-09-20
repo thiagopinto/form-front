@@ -15,6 +15,40 @@
             @ok="handleOk"
           >
             <form ref="form" @submit.stop.prevent>
+              <div class="row mt-2 mb-2" v-if="type != 'input'">
+                <div class="col-12">
+                  <autocomplete
+                    :search="search"
+                    :get-result-value="getResultValue"
+                    @submit="handleSelect"
+                    placeholder="Nome fantasia/CNES"
+                    aria-label="Nome fantasia/CNES"
+                  ></autocomplete>
+                </div>
+              </div>
+              <div
+                class="row justify-content-center align-items-center mt-2 mb-2"
+              >
+                <div class="col-4">
+                  {{ healthUnit.cnes_code }}
+                </div>
+                <div class="col-8">
+                  {{ healthUnit.alias_company_name }}
+                </div>
+              </div>
+              <div
+                class="row justify-content-center align-items-center mt-2 mb-2"
+              >
+                <div class="col-6">
+                  {{ healthUnit.address }}
+                </div>
+                <div class="col-1">
+                  {{ healthUnit.address_number }}
+                </div>
+                <div class="col-5">
+                  {{ healthUnit.neighborhood }}
+                </div>
+              </div>
               <div class="row">
                 <div class="col-6">
                   <validation-provider
@@ -91,36 +125,6 @@
                   </validation-provider>
                 </div>
               </div>
-              <div class="row" v-if="type != 'input'">
-                <div class="col-12">
-                  <autocomplete
-                    :search="search"
-                    :get-result-value="getResultValue"
-                    @submit="handleSelect"
-                    placeholder="Nome fantasia/CNES"
-                    aria-label="Nome fantasia/CNES"
-                  ></autocomplete>
-                </div>
-              </div>
-              <div class="row justify-content-center align-items-center">
-                <div class="col-4">
-                  {{ healthUnit.cnes_code }}
-                </div>
-                <div class="col-8">
-                  {{ healthUnit.alias_company_name }}
-                </div>
-              </div>
-              <div class="row justify-content-center align-items-center">
-                <div class="col-6">
-                  {{ healthUnit.address }}
-                </div>
-                <div class="col-1">
-                  {{ healthUnit.address_number }}
-                </div>
-                <div class="col-5">
-                  {{ healthUnit.neighborhood }}
-                </div>
-              </div>
               <div class="clearfix"></div>
             </form>
             <template v-slot:modal-footer="{ ok, cancel }">
@@ -142,6 +146,7 @@
   </div>
 </template>
 <script>
+import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
 export default {
   components: {},
   data() {
@@ -156,7 +161,8 @@ export default {
         range_number_start: null,
         range_number_end: null,
         cnes_code: null,
-        cnes_code_devolution: null
+        cnes_code_devolution: null,
+        responsible: null
       },
       quant: null,
       moves: [],
@@ -222,12 +228,14 @@ export default {
         const response = await this.$axios.put(`${this.url}`, this.form);
 
         this.$emit('addForm', { addForm: response.data });
+        this.notifyVue('top', 'center', 'Criado!', 'success');
         this.show = false;
       } catch (error) {
         const message =
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
+        this.notifyVue('top', 'center', error.response.data.message, 'danger');
         console.log(message);
         this.show = false;
       }
@@ -253,16 +261,32 @@ export default {
           `health_unit/?cnes_code=${result.cnes_code}`
         );
         this.healthUnit = response.data;
+        const lastSend = await this.$axios.get(
+          `${this.url}last-send/${result.cnes_code}`
+        );
+
+        this.form.responsible = lastSend.data.responsible;
       } catch (e) {
         await this.$store.dispatch('alerts/error', e);
       }
       this.form.cnes_code = this.healthUnit.cnes_code;
+    },
+    notifyVue(verticalAlign, horizontalAlign, message, type) {
+      this.$notify({
+        component: NotificationTemplate,
+        icon: 'fas fa-exclamation-circle',
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        message: message,
+        timeout: 10000,
+        type: type
+      });
     }
   },
   watch: {
     quant: function(val) {
       if (val > 1) {
-        this.form.end = (Number(this.form.start) + Number(val) - 1);
+        this.form.end = Number(this.form.start) + Number(val) - 1;
       } else {
         this.form.end = null;
       }
