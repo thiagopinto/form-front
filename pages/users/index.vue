@@ -70,7 +70,7 @@
               <template v-slot:cell(delete)="data">
                 <ConfirmDelete
                   :item="data.item"
-                  url="users/"
+                  url="user/"
                   @deletItem="getUsers"
                 ></ConfirmDelete>
               </template>
