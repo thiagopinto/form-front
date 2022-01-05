@@ -416,7 +416,7 @@ export default {
       return `?per_page=${this.perPage}&page=${this.currentPage}`;
     },
     genSearch() {
-      if (this.search.length > 3) {
+      if (this.search.length > 6) {
         return `&search=${this.search}`;
       } else {
         return '';
@@ -440,7 +440,9 @@ export default {
       }
     },
     searchHandler() {
-      this.getForms();
+      if (this.search.length > 6) {
+        this.getForms();
+      }
     },
     colorLines() {
       this.listForm.forEach(form => {
