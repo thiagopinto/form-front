@@ -2,36 +2,58 @@
   <div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @input="getHealthUnit"
-            class="pagination-danger"
-          ></b-pagination>
+        <div class="col-sm-12 col-md-2">
+          <b-form-group description="Data início da pesquisa">
+            <b-form-input
+              placeholder="Inicio"
+              name="search-date-start"
+              v-model="searchDate.start"
+              type="date"
+            ></b-form-input>
+          </b-form-group>
         </div>
         <div class="col-sm-12 col-md-2">
-          <b-form-select
-            v-model="perPage"
-            :options="perPageOptions"
-            @change="getHealthUnit"
-          ></b-form-select>
+          <b-form-group description="Data fim da pesquisa" :state="stateDate">
+            <b-form-input
+              placeholder="Fim"
+              name="search-date-end"
+              v-model="searchDate.end"
+              type="date"
+              :state="stateDate"
+            ></b-form-input>
+          </b-form-group>
+        </div>
+        <div class="col-sm-12 col-md-1 p-0 mx-1">
+          <b-button class="mt-0" variant="success" @click="getHealthUnit"
+            >Filtrar por data</b-button
+          >
+        </div>
+        <div class="col-sm-12 col-md-1 p-0 mx-1">
+          <b-button class="mt-0" variant="danger" @click="exportData"
+            >Exportar</b-button
+          >
+        </div>
+        <div class="col-sm-12 col-md-1 p-0 mx-1">
+          <b-button class="mt-0" variant="warning" @click="reportPdf"
+            >Relatório</b-button
+          >
         </div>
         <div class="col-sm-12 col-md-4">
-          <div class="input-group">
-            <input
-              type="text"
-              v-model="search"
-              @input="searchHandler"
-              class="form-control"
-            />
-            <div class="input-group-append">
-              <span class="input-group-text">
-                <i class="fas fa-search"></i>
-              </span>
-            </div>
-          </div>
+          <b-form-group description="Termo para pesquisa">
+            <b-input-group>
+              <b-form-input
+                placeholder="Buscar..."
+                v-model="search"
+                @input="searchHandler"
+                type="search"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-input-group-text>
+                  <font-awesome-icon :icon="['fas', 'search']" />
+                </b-input-group-text>
+              </b-input-group-append>
+            </b-input-group>
+          </b-form-group>
         </div>
       </div>
       <div class="row justify-content-between">
@@ -53,17 +75,44 @@
               <template v-slot:cell(name)="data">
                 {{ data.item.name }}
               </template>
-              <template v-slot:cell(email)="data">
-                {{ data.item.count }}
+              <template v-slot:cell(received)="data">
+                {{ data.item.received }}
               </template>
-              <template v-slot:cell(latitude)="data">
-                {{ data.item.latitude }}
+              <template v-slot:cell(used)="data">
+                {{ data.item.used }}
               </template>
-              <template v-slot:cell(longitude)="data">
-                {{ data.item.longitude }}
+              <template v-slot:cell(canceled)="data">
+                {{ data.item.canceled }}
+              </template>
+              <template v-slot:cell(stock)="data">
+                {{ data.item.stock }}
+              </template>
+              <template v-slot:cell(last_receipt)="data">
+                {{ data.item.last_receipt }}
+              </template>
+              <template v-slot:cell(last_receipt_day)="data">
+                {{ data.item.last_receipt_day }}
               </template>
             </b-table>
           </b-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            @input="getHealthUnit"
+            class="pagination-danger"
+          ></b-pagination>
+        </div>
+        <div class="col-sm-12 col-md-2">
+          <b-form-select
+            v-model="perPage"
+            :options="perPageOptions"
+            @change="getHealthUnit"
+          ></b-form-select>
         </div>
       </div>
       <div class="row">
@@ -73,7 +122,7 @@
               :load-tiles-while-animating="true"
               :load-tiles-while-interacting="true"
               data-projection="EPSG:4326"
-              style="height: 500px"
+              style="height: 500px;"
             >
               <vl-view
                 :zoom.sync="zoom"
@@ -96,7 +145,7 @@
                       <vl-geom-point
                         :coordinates="[
                           parseFloat(healthUnit.longitude),
-                          parseFloat(healthUnit.latitude)
+                          parseFloat(healthUnit.latitude),
                         ]"
                       ></vl-geom-point>
                       <vl-style-box>
@@ -109,7 +158,7 @@
                       <vl-overlay
                         :position="[
                           parseFloat(healthUnit.longitude),
-                          parseFloat(healthUnit.latitude)
+                          parseFloat(healthUnit.latitude),
                         ]"
                         :offset="[-38.5, -66]"
                       >
@@ -122,9 +171,13 @@
                         >
                           <div
                             class="content"
-                            style="background-color: transparent; padding-top: 0px; margin-top: -5px;"
+                            style="
+                              background-color: transparent;
+                              padding-top: 0px;
+                              margin-top: -5px;
+                            "
                           >
-                            {{ healthUnit.count }}
+                            {{ healthUnit.stock }}
                           </div>
                         </circle-progress>
                         <p class="is-light box content-map">
@@ -149,7 +202,7 @@
                 <vl-source-osm></vl-source-osm>
               </vl-layer-tile>
             </vl-map>
-            <div style="padding: 20px">
+            <div style="padding: 20px;">
               Zoom: {{ zoom }}<br />
               Center: {{ center }}<br />
               Rotation: {{ rotation }}<br />
@@ -163,11 +216,10 @@
 </template>
 <script>
 import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
+import XLSX from 'xlsx';
 
 export default {
-  components: {
-
-  },
+  components: {},
   data() {
     return {
       marker: require('@/assets/img/marker.png'),
@@ -177,13 +229,20 @@ export default {
       fields: [
         { key: 'cnes_code', label: 'CNES', sortable: true },
         { key: 'name', label: 'Nome', sortable: true },
-        { key: 'count', label: 'Estoque', sortable: true },
-        { key: 'latitude', label: 'Latitude', sortable: true },
-        { key: 'longitude', label: 'Longitude', sortable: true }
+        { key: 'received', label: 'Recebidos', sortable: true },
+        { key: 'used', label: 'Utilizados', sortable: true },
+        { key: 'canceled', label: 'Cancelados', sortable: true },
+        { key: 'stock', label: 'Estoque', sortable: true },
+        { key: 'last_receipt', label: 'Último recebimento', sortable: true },
+        {
+          key: 'last_receipt_day',
+          label: 'Dias Último recebimento',
+          sortable: true,
+        },
       ],
       transProps: {
         // Transition name
-        name: 'flip-list'
+        name: 'flip-list',
       },
       selectedHealthUnit: [],
       listHealthUnit: [],
@@ -197,17 +256,25 @@ export default {
       center: [-42.76189556281046, -5.075455784017862],
       rotation: 0,
       geolocPosition: undefined,
-      healthUnitFeatures: []
+      healthUnitFeatures: [],
+      searchDate: {
+        start: null,
+        end: null,
+      },
     };
   },
   async fetch() {
     this.isBusy = !this.isBusy;
     const response = await this.$axios.get(
-      `born_alive_form/report/${this.genPage()}${this.genSearch()}`
+      `born_alive_form/report/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`
     );
-    await response.data.data.forEach(healthUnit => {
+    await response.data.data.forEach((healthUnit) => {
       healthUnit.percent =
-        (healthUnit.stock_form_alive / 100) * healthUnit.count;
+        (healthUnit.stock_form_alive / 100) * healthUnit.stock;
+
+      if (healthUnit.percent > 100) {
+        healthUnit.percent = 100;
+      }
 
       if (healthUnit.percent >= 75) {
         healthUnit.color = '#87CB16';
@@ -233,9 +300,20 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    stateDate() {
+      if (this.searchDate.end != null) {
+        const start = new Date(this.searchDate.start);
+        const end = new Date(this.searchDate.end);
+        if (start > end) {
+          return false;
+        }
+        return null;
+      }
+      return null;
+    },
   },
-  created: function() {
+  created() {
     this.welcomeMessage();
   },
   mounted() {
@@ -256,23 +334,27 @@ export default {
         verticalAlign: verticalAlign,
         message: message,
         timeout: 10000,
-        type: type
+        type: type,
       });
     },
     selectAll() {
-      this.listHealthUnit.forEach(healthUnit => {
+      this.listHealthUnit.forEach((healthUnit) => {
         this.selectedHealthUnit.push(healthUnit.id);
       });
     },
     async getHealthUnit() {
       this.isBusy = !this.isBusy;
       const response = await this.$axios.get(
-        `born_alive_form/report/${this.genPage()}${this.genSearch()}`
+        `born_alive_form/report/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`
       );
       this.listHealthUnit = [];
-      await response.data.data.forEach(healthUnit => {
+      await response.data.data.forEach((healthUnit) => {
         healthUnit.percent =
-          (healthUnit.stock_form_alive / 100) * healthUnit.count;
+          (healthUnit.stock_form_alive / 100) * healthUnit.stock;
+
+        if (healthUnit.percent > 100) {
+          healthUnit.percent = 100;
+        }
 
         if (healthUnit.percent > 75) {
           healthUnit.color = '#87CB16';
@@ -300,10 +382,74 @@ export default {
         return '';
       }
     },
+    genFilterDate() {
+      if (this.searchDate.start != null && this.searchDate.end != null) {
+        const start = new Date(this.searchDate.start);
+        const end = new Date(this.searchDate.end);
+        if (start > end) {
+          return '';
+        }
+        return (
+          '&start=' + this.searchDate.start + '&end=' + this.searchDate.end
+        );
+      } else {
+        return '';
+      }
+    },
     searchHandler() {
       this.getHealthUnit();
-    }
-  }
+    },
+    async exportData() {
+      this.perPage = 100000;
+      const response = await this.$axios.get(
+        `born_alive_form/report/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`
+      );
+
+      const items = [];
+
+      response.data.data.forEach((healthUnit) => {
+        delete healthUnit.latitude;
+        delete healthUnit.longitude;
+        delete healthUnit.stock_form_alive;
+        delete healthUnit.stock_form_death;
+        items.push(healthUnit);
+      });
+      const today = new Date().toISOString().slice(0, 10);
+      const data = XLSX.utils.json_to_sheet(items);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.writeFile(wb, `${today}-dn.xlsx`);
+      this.perPage = 10;
+    },
+    async reportPdf() {
+      this.perPage = 100000;
+      try {
+        const response = await this.$axios.get(
+          `born_alive_form/report/pdf/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`,
+          {
+            responseType: 'blob',
+          }
+        );
+        const today = new Date().toISOString().slice(0, 10);
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        // const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.target = '_blank';
+        link.download = `${today}-relatório-dn.pdf`;
+        link.click();
+        // window.open(url);
+        // console.log(response);
+      } catch (error) {
+        const message =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+        console.log(message);
+      }
+      this.perPage = 10;
+    },
+  },
 };
 </script>
 <style>

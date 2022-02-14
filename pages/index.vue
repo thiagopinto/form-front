@@ -3,13 +3,13 @@
     <div class="col-sm-12 col-md-6 col-lg-4">
       <b-button to="do" block variant="danger" size="lg"
         ><font-awesome-icon :icon="['fas', 'cross']" size="4x" />
-        <div>Daclaração de Óbito</div>
+        <div>Declaração de Óbito</div>
       </b-button>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4">
       <b-button to="dn" block variant="info" size="lg"
         ><font-awesome-icon :icon="['fas', 'star']" size="4x" />
-        <div>Daclaração de Nascido</div>
+        <div>Declaração de Nascido</div>
       </b-button>
     </div>
   </div>

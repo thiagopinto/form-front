@@ -1,5 +1,5 @@
 <template>
-  <div style="width: max-content; display: inline-block" class="m-0 p-0">
+  <div style="width: max-content; display: inline-block;" class="m-0 p-0">
     <b-button block size="sm" class="m-0" :variant="variant" @click="showForm">
       <slot />
     </b-button>
@@ -16,7 +16,7 @@
           >
             <form ref="form" @submit.stop.prevent>
               <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                   <b-form-group label="Número da fichas:">
                     <b-form-input
                       name="form-number"
@@ -27,13 +27,13 @@
                     </b-form-input>
                   </b-form-group>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                   <validation-provider
                     name="Data"
                     :rules="{ required: true }"
                     v-slot="validationContext"
                   >
-                    <b-form-group label="Data:">
+                    <b-form-group :label="`Data do ${eventName}`">
                       <b-form-input
                         name="form-event_date"
                         :state="getValidationState(validationContext)"
@@ -44,6 +44,29 @@
                       <b-form-invalid-feedback id="form-event_date-feedback">{{
                         validationContext.errors[0]
                       }}</b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </div>
+                <div class="col-4">
+                  <validation-provider
+                    name="Data"
+                    :rules="{ required: true }"
+                    v-slot="validationContext"
+                  >
+                    <b-form-group label="Data do recebimento">
+                      <b-form-input
+                        name="form-receipt_date"
+                        :state="getValidationState(validationContext)"
+                        v-model="form.receipt_date"
+                        aria-describedby="form-receipt_date-feedback"
+                        type="date"
+                      ></b-form-input>
+                      <b-form-invalid-feedback
+                        id="form-receipt_date-feedback"
+                        >{{
+                          validationContext.errors[0]
+                        }}</b-form-invalid-feedback
+                      >
                     </b-form-group>
                   </validation-provider>
                 </div>
@@ -124,6 +147,7 @@
   </div>
 </template>
 <script>
+import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
 export default {
   components: {},
   data() {
@@ -135,10 +159,11 @@ export default {
         start: null,
         end: null,
         event_date: null,
+        receipt_date: null,
         range_number_start: null,
         range_number_end: null,
         cnes_code: null,
-        cnes_code_devolution: null
+        cnes_code_devolution: null,
       },
       moves: [],
       show: false,
@@ -149,8 +174,8 @@ export default {
         alias_company_name: null,
         address: null,
         address_number: null,
-        neighborhood: null
-      }
+        neighborhood: null,
+      },
     };
   },
   props: {
@@ -158,14 +183,15 @@ export default {
     url: String,
     type: String,
     title: String,
-    variant: String
+    variant: String,
+    eventName: String,
   },
   created() {
     if (this.item) {
       this.form = Object.assign({}, this.item);
     }
   },
-  mounted: async() => {},
+  mounted() {},
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
@@ -204,6 +230,8 @@ export default {
         const response = await this.$axios.put(`${this.url}`, this.form);
 
         this.$emit('addForm', { addForm: response.data });
+        this.notifyVue('top', 'center', 'Criado!', 'success');
+
         this.show = false;
       } catch (error) {
         const message =
@@ -211,6 +239,12 @@ export default {
           error.message ||
           error.toString();
         console.log(message);
+        this.notifyVue(
+          'top',
+          'center',
+          message.errors.cnes_code_devolution[0],
+          'danger'
+        );
         this.show = false;
       }
     },
@@ -234,13 +268,24 @@ export default {
         const response = await this.$axios.get(
           `health_unit/?cnes_code=${result.cnes_code}`
         );
-        this.healthUnit = response.data;
+        this.healthUnit = response.data[0];
+        this.form.cnes_code_devolution = this.healthUnit.cnes_code;
       } catch (e) {
         await this.$store.dispatch('alerts/error', e);
       }
-      this.form.cnes_code_devolution = this.healthUnit.cnes_code;
-    }
-  }
+    },
+    notifyVue(verticalAlign, horizontalAlign, message, type) {
+      this.$notify({
+        component: NotificationTemplate,
+        icon: 'fas fa-exclamation-circle',
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        message: message,
+        timeout: 10000,
+        type: type,
+      });
+    },
+  },
 };
 </script>
 <style lang="scss">

@@ -110,7 +110,7 @@
             @addForm="getForms"
             variant="danger"
           ></send-form>
-          <b-button variant="info" to="/dn/report">
+          <b-button variant="info" to="/do/report">
             <font-awesome-icon :icon="['far', 'chart-bar']" />
           </b-button>
         </div>
@@ -161,6 +161,7 @@
                   <receivement-form
                     :item="data.item"
                     :url="url"
+                    eventName="óbito"
                     type="input"
                     title="Preenchimento de ficha"
                     @addForm="getForms"
@@ -222,8 +223,8 @@
               </template>
             </b-table>
           </b-card>
-          <dir class="row">
-            <div class="col-sm-12 col-md-3">
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
               <b-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
@@ -240,7 +241,7 @@
                 @change="getForms"
               ></b-form-select>
             </div>
-          </dir>
+          </div>
         </div>
       </div>
     </div>

@@ -35,6 +35,15 @@
         </div>
       </div>
       <div class="row justify-content-lg-end">
+        <FormsAddHealthUnit
+          :item="null"
+          :url="url"
+          iconButton="plus"
+          type="input"
+          title="Receber Fichas"
+          @addForm="getHealthUnit"
+          variant="danger"
+        ></FormsAddHealthUnit>
         <div class="col-3">
           <b-button block variant="info" @click="selectAll">
             Selecionar todos
@@ -101,6 +110,17 @@
                 >
                 </b-form-checkbox>
               </template>
+              <template v-slot:cell(action)="data">
+                <FormsAddHealthUnit
+                  :item="data.item"
+                  :url="url"
+                  iconButton="edit"
+                  type="input"
+                  title="Receber Fichas"
+                  @addForm="getHealthUnit"
+                  variant="danger"
+                ></FormsAddHealthUnit>
+              </template>
             </b-table>
           </b-card>
         </div>
@@ -112,7 +132,7 @@
               :load-tiles-while-animating="true"
               :load-tiles-while-interacting="true"
               data-projection="EPSG:4326"
-              style="height: 500px"
+              style="height: 500px;"
             >
               <vl-view
                 :zoom.sync="zoom"
@@ -135,7 +155,7 @@
                       <vl-geom-point
                         :coordinates="[
                           parseFloat(healthUnit.longitude),
-                          parseFloat(healthUnit.latitude)
+                          parseFloat(healthUnit.latitude),
                         ]"
                       ></vl-geom-point>
                       <vl-style-box>
@@ -148,7 +168,7 @@
                       <vl-overlay
                         :position="[
                           parseFloat(healthUnit.longitude),
-                          parseFloat(healthUnit.latitude)
+                          parseFloat(healthUnit.latitude),
                         ]"
                         :offset="[20, -50]"
                       >
@@ -174,7 +194,7 @@
                 <vl-source-osm></vl-source-osm>
               </vl-layer-tile>
             </vl-map>
-            <div style="padding: 20px">
+            <div style="padding: 20px;">
               Zoom: {{ zoom }}<br />
               Center: {{ center }}<br />
               Rotation: {{ rotation }}<br />
@@ -205,11 +225,12 @@ export default {
         { key: 'stock_form_alive', label: 'Estoque DN' },
         { key: 'latitude', label: 'Latitude', sortable: true },
         { key: 'longitude', label: 'Longitude', sortable: true },
-        { key: 'geocode', label: 'GeoCode' }
+        { key: 'geocode', label: 'GeoCode' },
+        { key: 'action', label: 'Ação' },
       ],
       transProps: {
         // Transition name
-        name: 'flip-list'
+        name: 'flip-list',
       },
       selectedHealthUnit: [],
       listHealthUnit: [],
@@ -223,7 +244,8 @@ export default {
       center: [-42.76052227179484, -5.095632087716865],
       rotation: 0,
       geolocPosition: undefined,
-      healthUnitFeatures: []
+      healthUnitFeatures: [],
+      url: 'health_unit/',
     };
   },
   async fetch() {
@@ -245,9 +267,9 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
-  created: function() {
+  created() {
     this.welcomeMessage();
   },
   mounted() {
@@ -268,11 +290,11 @@ export default {
         verticalAlign: verticalAlign,
         message: message,
         timeout: 10000,
-        type: type
+        type: type,
       });
     },
     selectAll() {
-      this.listHealthUnit.forEach(healthUnit => {
+      this.listHealthUnit.forEach((healthUnit) => {
         this.selectedHealthUnit.push(healthUnit.id);
       });
     },
@@ -280,7 +302,7 @@ export default {
       try {
         this.isLoad = true;
         await this.$axios.patch(`health_unit/?action=geo_reference`, {
-          ids: this.selectedHealthUnit
+          ids: this.selectedHealthUnit,
         });
         await this.notifyVue('top', 'center', 'Atualizado', 'success');
         this.isLoad = false;
@@ -322,8 +344,8 @@ export default {
     },
     searchHandler() {
       this.getHealthUnit();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

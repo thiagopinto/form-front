@@ -15,7 +15,6 @@
         <div class="col-sm-12 col-md-2">
           <b-form-group
             description="Data fim da pesquisa"
-            :invalid-feedback="invalidFeedbackDate"
             :state="stateDate"
           >
             <b-form-input
@@ -161,6 +160,7 @@
                   <receivement-form
                     :item="data.item"
                     :url="url"
+                    eventName="nascimento"
                     type="input"
                     title="Preenchimento de ficha"
                     @addForm="getForms"
@@ -221,8 +221,8 @@
               </template>
             </b-table>
           </b-card>
-          <dir class="row">
-            <div class="col-sm-12 col-md-3">
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
               <b-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
@@ -239,7 +239,7 @@
                 @change="getForms"
               ></b-form-select>
             </div>
-          </dir>
+          </div>
         </div>
       </div>
     </div>
@@ -320,17 +320,6 @@ export default {
       } else {
         return false;
       }
-    },
-    invalidFeedbackDate() {
-      if (this.searchDate.end != null) {
-        const start = new Date(this.searchDate.start);
-        const end = new Date(this.searchDate.end);
-        if (start > end) {
-          return false;
-        }
-        return null;
-      }
-      return null;
     },
     stateDate() {
       if (this.searchDate.end != null) {

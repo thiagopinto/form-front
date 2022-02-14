@@ -1,5 +1,5 @@
 <template>
-  <div style="width: max-content; display: inline-block" class="m-0 p-0">
+  <div style="width: max-content; display: inline-block;" class="m-0 p-0">
     <b-button block :variant="variant" @click="showForm">
       <font-awesome-icon :icon="['fas', iconButton]" />
     </b-button>
@@ -162,7 +162,7 @@ export default {
         range_number_end: null,
         cnes_code: null,
         cnes_code_devolution: null,
-        responsible: null
+        responsible: null,
       },
       quant: null,
       moves: [],
@@ -174,8 +174,8 @@ export default {
         alias_company_name: null,
         address: null,
         address_number: null,
-        neighborhood: null
-      }
+        neighborhood: null,
+      },
     };
   },
   props: {
@@ -184,14 +184,14 @@ export default {
     iconButton: String,
     type: String,
     title: String,
-    variant: String
+    variant: String,
   },
   created() {
     if (this.item) {
       this.form = Object.assign({}, this.item);
     }
   },
-  mounted: async() => {},
+  async mounted() {},
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
@@ -235,7 +235,13 @@ export default {
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
-        this.notifyVue('top', 'center', error.response.data.message, 'danger');
+        this.notifyVue(
+          'top',
+          'center',
+          message.errors.cnes_code,
+          'danger'
+        );
+
         console.log(message);
         this.show = false;
       }
@@ -260,16 +266,16 @@ export default {
         const response = await this.$axios.get(
           `health_unit/?cnes_code=${result.cnes_code}`
         );
-        this.healthUnit = response.data;
+        this.healthUnit = response.data[0];
         const lastSend = await this.$axios.get(
           `${this.url}last-send/${result.cnes_code}`
         );
 
         this.form.responsible = lastSend.data.responsible;
+        this.form.cnes_code = this.healthUnit.cnes_code;
       } catch (e) {
         await this.$store.dispatch('alerts/error', e);
       }
-      this.form.cnes_code = this.healthUnit.cnes_code;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -279,19 +285,19 @@ export default {
         verticalAlign: verticalAlign,
         message: message,
         timeout: 10000,
-        type: type
+        type: type,
       });
-    }
+    },
   },
   watch: {
-    quant: function(val) {
+    quant(val) {
       if (val > 1) {
         this.form.end = Number(this.form.start) + Number(val) - 1;
       } else {
         this.form.end = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">

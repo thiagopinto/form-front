@@ -5,7 +5,7 @@ export default {
     baseUrl: process.env.BASE_URL,
     isDemo: process.env.IS_DEMO,
     apiKey: process.env.API_KEY,
-    applicationToken: process.env.APPLICATION_TOKEN
+    applicationToken: process.env.APPLICATION_TOKEN,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -17,69 +17,68 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content:
-          'NEV Núcleo de Enventos vitais'
+        content: 'NEV Núcleo de Enventos vitais',
       },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
       { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
-      { name: 'theme-color', content: '#ffffff' }
+      { name: 'theme-color', content: '#ffffff' },
     ],
     link: [
       {
         rel: 'apple-touch-icon',
         size: '57x57',
-        href: '/apple-icon-57x57.png'
+        href: '/apple-icon-57x57.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '60x60',
-        href: '/apple-icon-60x60.png'
+        href: '/apple-icon-60x60.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '72x72',
-        href: '/apple-icon-72x72.png'
+        href: '/apple-icon-72x72.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '72x72',
-        href: '/apple-icon-72x72.png'
+        href: '/apple-icon-72x72.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '76x76',
-        href: '/apple-icon-76x76.png'
+        href: '/apple-icon-76x76.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '114x114',
-        href: '/apple-icon-114x114.png'
+        href: '/apple-icon-114x114.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '120x120',
-        href: '/apple-icon-120x120.png'
+        href: '/apple-icon-120x120.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '144x144',
-        href: '/apple-icon-144x144.png'
+        href: '/apple-icon-144x144.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '152x152',
-        href: '/apple-icon-152x152.png'
+        href: '/apple-icon-152x152.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '152x152',
-        href: '/apple-icon-152x152.png'
+        href: '/apple-icon-152x152.png',
       },
       {
         rel: 'apple-touch-icon',
         size: '180x180',
-        href: '/apple-icon-180x180.png'
+        href: '/apple-icon-180x180.png',
       },
       { rel: 'icon', size: '96x96', href: '/favicon-96x96.png' },
       { rel: 'icon', size: '32x32', href: '/favicon-32x32.png' },
@@ -88,13 +87,13 @@ export default {
         rel: 'icon',
         type: 'image/png',
         size: '192x192',
-        href: '/android-icon-192x192.png'
+        href: '/android-icon-192x192.png',
       },
       { rel: 'manifest', href: '/site.webmanifest' },
       { rel: 'manifest', href: '/manifest' },
       { rel: 'mask-icon', href: 'mask-icon', color: 'ffffff' },
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -108,10 +107,11 @@ export default {
     { src: '~/plugins/vuelayers', mode: 'client' },
     { src: '~/plugins/autocomplete-vue', mode: 'client' },
     { src: '~/plugins/easy-circular-progress', mode: 'client' },
-    { src: '~/plugins/vue-lazytube' },
-    { src: '~/plugins/vee-validate' },
-    { src: '~/plugins/vue-notifyjs' },
-    { src: '~/plugins/vue-croppa' }
+    { src: '~/plugins/vue-lazytube', mode: 'client' },
+    { src: '~/plugins/vee-validate', mode: 'client' },
+    { src: '~/plugins/vue-notifyjs', mode: 'client' },
+    { src: '~/plugins/vue-croppa', mode: 'client' },
+    { src: '~/plugins/v-mask', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -130,7 +130,7 @@ export default {
     // https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -146,32 +146,32 @@ export default {
     // https://sitemap.nuxtjs.org/guide/setup
     '@nuxtjs/sitemap',
     '~/modules/vuelayers',
-    '~/modules/autocomplete-vue'
+    '~/modules/autocomplete-vue',
   ],
 
   styleResources: {
     sass: [],
     scss: [
-      './assets/scss/*.scss'
+      './assets/scss/*.scss',
       // './assets/scss/paper/*.scss',
       // './assets/scss/paper/mixins/*.scss'
     ],
     less: [],
     stylus: [],
-    hoistUseStatements: true
+    hoistUseStatements: true,
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-npmclearaxios
   axios: {
     baseURL: `${process.env.API_BASE_URL}/api/v1/`,
-    credentials: true
+    credentials: true,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'pt-BR'
-    }
+      lang: 'pt-BR',
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -203,10 +203,17 @@ export default {
         'faPlus',
         'faPaperPlane',
         'faPrint',
-        'faBackspace'
+        'faBackspace',
       ],
-      regular: ['faTimesCircle', 'faFileAlt', 'faNewspaper', 'faPlusSquare', 'faChartBar', 'faEye']
-    }
+      regular: [
+        'faTimesCircle',
+        'faFileAlt',
+        'faNewspaper',
+        'faPlusSquare',
+        'faChartBar',
+        'faEye',
+      ],
+    },
   },
   auth: {
     cookie: {
@@ -214,8 +221,8 @@ export default {
       options: {
         path: '/',
         domain: 'localhost',
-        secure: true
-      }
+        secure: true,
+      },
     },
     strategies: {
       laravelSanctum: {
@@ -225,27 +232,27 @@ export default {
           type: 'Bearer',
           property: 'plainTextToken',
           global: true,
-          required: true
+          required: true,
         },
         endpoints: {
           login: { url: '/login/', method: 'post' },
           logout: false,
-          user: { url: '/me/', method: 'get' }
-        }
-      }
-    }
+          user: { url: '/me/', method: 'get' },
+        },
+      },
+    },
   },
   layoutTransition: {
     name: 'layouts',
-    mode: 'out-in'
+    mode: 'out-in',
   },
   pageTransition: {
     name: 'page',
-    mode: 'out-in'
+    mode: 'out-in',
   },
   loading: {
     color: '#e95e38',
-    height: '5px'
+    height: '5px',
   },
   router: {
     extendRoutes(routes, resolve) {
@@ -253,19 +260,19 @@ export default {
         {
           name: 'auth-activate',
           path: '/auth/activate/:uid/:token',
-          component: '~/pages/auth/activate/_uid.vue'
+          component: '~/pages/auth/activate/_uid.vue',
         },
         {
           name: 'password-reset',
           path: '/auth/reset/confirm/:token/:email',
-          component: '~/pages/auth/reset/confirm/_token.vue'
+          component: '~/pages/auth/reset/confirm/_token.vue',
         }
       );
-    }
+    },
   },
   sitemap: {
     hostname: process.env.BASE_URL,
     gzip: true,
-    lastmod: '2021-08-03'
-  }
+    lastmod: '2021-08-03',
+  },
 };
