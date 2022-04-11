@@ -1,6 +1,12 @@
 <template>
   <div style="width: max-content; display: inline-block;" class="m-0 p-0">
-    <b-button block :variant="variant" @click="showForm">
+    <b-button
+      block
+      :variant="variant"
+      v-b-tooltip.hover
+      title="Enviar"
+      @click="showForm"
+    >
       <font-awesome-icon :icon="['fas', iconButton]" />
     </b-button>
     <b-overlay :show="show" rounded="sm">
@@ -235,12 +241,7 @@ export default {
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
-        this.notifyVue(
-          'top',
-          'center',
-          message.errors.cnes_code,
-          'danger'
-        );
+        this.notifyVue('top', 'center', message.errors.cnes_code, 'danger');
 
         console.log(message);
         this.show = false;

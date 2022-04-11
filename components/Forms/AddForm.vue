@@ -1,6 +1,12 @@
 <template>
-  <div style="width: max-content; display: inline-block" class="m-0 p-0">
-    <b-button block :variant="variant" @click="showForm">
+  <div style="width: max-content; display: inline-block;" class="m-0 p-0">
+    <b-button
+      block
+      :variant="variant"
+      v-b-tooltip.hover
+      title="Receber"
+      @click="showForm"
+    >
       <font-awesome-icon :icon="['fas', iconButton]" />
     </b-button>
     <b-overlay :show="show" rounded="sm">
@@ -102,7 +108,7 @@ export default {
         range_number_start: null,
         range_number_end: null,
         cnes_code: null,
-        cnes_code_devolution: null
+        cnes_code_devolution: null,
       },
       quant: null,
       moves: [],
@@ -114,8 +120,8 @@ export default {
         alias_company_name: null,
         address: null,
         address_number: null,
-        neighborhood: null
-      }
+        neighborhood: null,
+      },
     };
   },
   props: {
@@ -124,7 +130,7 @@ export default {
     iconButton: String,
     type: String,
     title: String,
-    variant: String
+    variant: String,
   },
   created() {
     if (this.item) {
@@ -180,7 +186,7 @@ export default {
           range_number_start: null,
           range_number_end: null,
           cnes_code: null,
-          cnes_code_devolution: null
+          cnes_code_devolution: null,
         };
         this.quant = null;
       } catch (error) {
@@ -197,9 +203,9 @@ export default {
         verticalAlign: verticalAlign,
         message: message,
         timeout: 10000,
-        type: type
+        type: type,
       });
-    }
+    },
   },
   watch: {
     quant: function(val) {
@@ -208,8 +214,8 @@ export default {
       } else {
         this.form.end = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss"></style>

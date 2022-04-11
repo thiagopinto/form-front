@@ -109,7 +109,7 @@
             @addForm="getForms"
             variant="danger"
           ></send-form>
-          <b-button variant="info" to="/dn/report">
+          <b-button v-b-tooltip.hover title="Relatórios" variant="info" to="/dn/report">
             <font-awesome-icon :icon="['far', 'chart-bar']" />
           </b-button>
         </div>

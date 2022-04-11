@@ -103,15 +103,22 @@ export default {
   plugins: [
     { src: '~/plugins/nuxtjs-bootstrap-sidebar' },
     { src: '~plugins/filter' },
+    { src: '~/plugins/apexcharts', mode: 'client' },
     { src: '~/plugins/vue2-editor', mode: 'client' },
-    { src: '~/plugins/vuelayers', mode: 'client' },
     { src: '~/plugins/autocomplete-vue', mode: 'client' },
     { src: '~/plugins/easy-circular-progress', mode: 'client' },
+    { src: '~/plugins/v-click-outside', mode: 'client' },
     { src: '~/plugins/vue-lazytube', mode: 'client' },
     { src: '~/plugins/vee-validate', mode: 'client' },
     { src: '~/plugins/vue-notifyjs', mode: 'client' },
     { src: '~/plugins/vue-croppa', mode: 'client' },
     { src: '~/plugins/v-mask', mode: 'client' },
+    { src: '~/plugins/vuelayers', mode: 'client' },
+    { src: '~/plugins/ol-ext', mode: 'client' },
+    { src: '~/plugins/ol', mode: 'client' },
+    { src: '~/plugins/locale' },
+    { src: '~/plugins/palette' },
+    { src: '~/plugins/simple-statistics' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -145,6 +152,8 @@ export default {
     '@nuxtjs/auth-next',
     // https://sitemap.nuxtjs.org/guide/setup
     '@nuxtjs/sitemap',
+    // https://saintplay.github.io/vue-swatches/guide
+    'vue-swatches/nuxt',
     '~/modules/vuelayers',
     '~/modules/autocomplete-vue',
   ],
@@ -204,6 +213,11 @@ export default {
         'faPaperPlane',
         'faPrint',
         'faBackspace',
+        'faChartPie',
+        'faDatabase',
+        'faFilter',
+        'faTimes',
+        'faChevronRight'
       ],
       regular: [
         'faTimesCircle',
@@ -212,6 +226,7 @@ export default {
         'faPlusSquare',
         'faChartBar',
         'faEye',
+        'faMap'
       ],
     },
   },
@@ -266,6 +281,11 @@ export default {
           name: 'password-reset',
           path: '/auth/reset/confirm/:token/:email',
           component: '~/pages/auth/reset/confirm/_token.vue',
+        },
+        {
+          name: 'datasets-loads',
+          path: '/datasets/load/:source/:system/:initial',
+          component: '~/pages/datasets/_load.vue',
         }
       );
     },

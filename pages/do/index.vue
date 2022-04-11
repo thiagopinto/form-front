@@ -110,7 +110,12 @@
             @addForm="getForms"
             variant="danger"
           ></send-form>
-          <b-button variant="info" to="/do/report">
+          <b-button
+            v-b-tooltip.hover
+            title="Relatórios"
+            variant="info"
+            to="/do/report"
+          >
             <font-awesome-icon :icon="['far', 'chart-bar']" />
           </b-button>
         </div>
@@ -253,13 +258,15 @@ import NotificationTemplate from '~/components/Notifications/NotificationTemplat
 import AddForm from '~/components/Forms/AddForm.vue';
 import SendForm from '~/components/Forms/SendForm.vue';
 import ReceivementForm from '~/components/Forms/ReceivementForm.vue';
+import notify from '@/mixins/notify';
 
 export default {
+  mixins: [notify],
   components: {
     // EditForm,
     AddForm,
     SendForm,
-    ReceivementForm
+    ReceivementForm,
   },
   data() {
     return {
@@ -274,15 +281,15 @@ export default {
         {
           key: 'alias_company_name',
           label: 'Unidade',
-          sortable: true
+          sortable: true,
         },
         { key: 'name', label: 'Nome', sortable: true },
         { key: 'event_date', label: 'Data', sortable: true },
-        { key: 'action', label: 'Ações' }
+        { key: 'action', label: 'Ações' },
       ],
       transProps: {
         // Transition name
-        name: 'flip-list'
+        name: 'flip-list',
       },
       selectedHealthUnit: [],
       listForm: [],
@@ -296,9 +303,9 @@ export default {
       status: [1, 2, 3, 4],
       searchDate: {
         start: null,
-        end: null
+        end: null,
       },
-      stock: 0
+      stock: 0,
     };
   },
   async fetch() {
@@ -344,7 +351,7 @@ export default {
         return null;
       }
       return null;
-    }
+    },
   },
   created: function() {
     this.welcomeMessage();
@@ -362,19 +369,8 @@ export default {
         'Lista de formulários de Declaração de Óbito'
       );
     },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        timeout: 10000,
-        type: type
-      });
-    },
     selectAll() {
-      this.listForm.forEach(healthUnit => {
+      this.listForm.forEach((healthUnit) => {
         this.selectedHealthUnit.push(healthUnit.id);
       });
     },
@@ -384,7 +380,7 @@ export default {
         await this.$axios.patch(
           `death_certificate_form/?action=geo_reference`,
           {
-            ids: this.selectedHealthUnit
+            ids: this.selectedHealthUnit,
           }
         );
         await this.notifyVue('top', 'center', 'Atualizado', 'success');
@@ -446,7 +442,7 @@ export default {
       }
     },
     colorLines() {
-      this.listForm.forEach(form => {
+      this.listForm.forEach((form) => {
         if (form.status === 1) {
           form._rowVariant = 'warning';
         } else if (form.status === 2) {
@@ -519,7 +515,7 @@ export default {
         const response = await this.$axios.get(
           `${this.url}receipt/${item.id}`,
           {
-            responseType: 'blob'
+            responseType: 'blob',
           }
         );
         const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -537,13 +533,13 @@ export default {
           error.toString();
         console.log(message);
       }
-    }
+    },
   },
   watch: {
     status: function() {
       this.getForms();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

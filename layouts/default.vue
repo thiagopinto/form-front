@@ -2,7 +2,7 @@
   <div id="app">
     <notifications></notifications>
     <nuxtjs-bootstrap-sidebar
-      :show.sync="initialShow"
+      :initShow.sync="initialShow"
       :links.sync="links"
       :fa="true"
       theme="paper-theme"
@@ -18,35 +18,33 @@
       <template v-slot:footer> </template>
       <template v-slot:navbar>
         <b-navbar-brand class="text-danger">{{ title }}</b-navbar-brand>
-        <client-only placeholder="Loading...">
-          <b-navbar-nav class="ml-auto mr-0" v-if="loggedIn">
-            <b-nav-item class="text-danger d-inline mt-0 mb-0">
-              <b-dropdown variant="outline-danger" size="sm" class="m-0">
-                <!-- Using 'button-content' slot -->
-                <template #button-content>
-                  <em> Equipe </em>
-                </template>
-                <b-dropdown-item to="/users">Usuários</b-dropdown-item>
-              </b-dropdown>
-              <nuxt-link to="/auth/profile">
-                <div class="card d-inline text-danger">
-                  <em class="pl-1">{{ authUser.name }} </em>
-                  <div class="author d-inline">
-                    <img
-                      class="avatar border-white d-inline p-0 m-0"
-                      :src="face"
-                      :alt="authUser.name"
-                    />
-                  </div>
+        <b-navbar-nav class="ml-auto mr-0" v-if="loggedIn">
+          <b-nav-item class="text-danger d-inline mt-0 mb-0">
+            <b-dropdown variant="outline-danger" size="sm" class="m-0">
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em> Equipe </em>
+              </template>
+              <b-dropdown-item to="/users">Usuários</b-dropdown-item>
+            </b-dropdown>
+            <nuxt-link to="/auth/profile">
+              <div class="card d-inline text-danger">
+                <em class="pl-1">{{ authUser.name }} </em>
+                <div class="author d-inline">
+                  <img
+                    class="avatar border-white d-inline p-0 m-0"
+                    :src="face"
+                    :alt="authUser.name"
+                  />
                 </div>
-              </nuxt-link>
-            </b-nav-item>
-          </b-navbar-nav>
+              </div>
+            </nuxt-link>
+          </b-nav-item>
+        </b-navbar-nav>
 
-          <b-navbar-nav class="ml-auto mr-0" v-else>
-            <b-nav-item to="/auth/login" class="text-danger">Login</b-nav-item>
-          </b-navbar-nav>
-        </client-only>
+        <b-navbar-nav class="ml-auto mr-0" v-else>
+          <b-nav-item to="/auth/login" class="text-danger">Login</b-nav-item>
+        </b-navbar-nav>
       </template>
 
       <template v-slot:content>
@@ -64,7 +62,7 @@ import NuxtjsBootstrapSidebar from 'nuxtjs-bootstrap-sidebar2';
 export default {
   name: 'default',
   components: {
-    NuxtjsBootstrapSidebar
+    NuxtjsBootstrapSidebar,
   },
   computed: {
     title() {
@@ -86,41 +84,56 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   data() {
     return {
       message: 'DVS',
       logoMini: require('@/assets/img/logo-mini.png'),
       face: require('@/assets/img/face-0.jpg'),
-      initialShow: true,
+      initialShow: false,
       links: [
         { name: 'Home', href: { name: 'index' }, faIcon: ['fas', 'home'] },
         {
           name: 'Declaração de Óbito',
           href: { name: 'do' },
-          faIcon: ['fas', 'cross']
+          faIcon: ['fas', 'cross'],
         },
         {
           name: 'Declaração de Nascido',
           href: { name: 'dn' },
-          faIcon: ['fas', 'star']
+          faIcon: ['fas', 'star'],
         },
         {
           name: 'Unidades de saúde',
           href: { name: 'health_unit' },
-          faIcon: ['fas', 'hospital']
-        }
+          faIcon: ['fas', 'hospital'],
+        },
+        {
+          name: 'Sim',
+          href: { name: 'sim' },
+          faIcon: ['fas', 'chart-pie'],
+        },
+        {
+          name: 'Sinasc',
+          href: { name: 'sinasc' },
+          faIcon: ['fas', 'chart-pie'],
+        },
+        {
+          name: 'Datasets',
+          href: { name: 'datasets' },
+          faIcon: ['fas', 'database'],
+        },
       ],
-      categorysGroups: null
+      categorysGroups: null,
     };
   },
   methods: {
     onSidebarChanged() {},
     setMessage(data) {
       this.message = data.message;
-    }
+    },
   },
-  async fetch() {}
+  async fetch() {},
 };
 </script>

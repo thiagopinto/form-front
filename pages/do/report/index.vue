@@ -93,6 +93,20 @@
               <template v-slot:cell(longitude)="data">
                 {{ data.item.longitude }}
               </template>
+              <template v-slot:cell(action)="data">
+                <b-button
+                  class="mt-0"
+                  variant="danger"
+                  @click="exportDataByHealthUnit(data.item)"
+                  >Exportar</b-button
+                >
+                <b-button
+                  class="mt-0"
+                  variant="warning"
+                  @click="reportByHealthUnitPdf(data.item)"
+                  >Relatório</b-button
+                >
+              </template>
             </b-table>
           </b-card>
         </div>
@@ -215,13 +229,20 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-import XLSX from 'xlsx';
+import notify from '@/mixins/notify';
+import filters from '@/mixins/filters';
+import pagination from '@/mixins/pagination';
+import exports from '@/mixins/exports';
+import reports from '@/mixins/reports';
 
 export default {
+  names: 'DoReport',
+  mixins: [notify, filters, exports, reports, pagination],
   components: {},
   data() {
     return {
+      module: 'do',
+      url: 'death_certificate_form/report/',
       marker: require('@/assets/img/marker.png'),
       isBusy: false,
       isLoad: false,
@@ -239,6 +260,7 @@ export default {
           label: 'Dias Último recebimento',
           sortable: true,
         },
+        { key: 'action', label: 'Ações', sortable: false },
       ],
       transProps: {
         // Transition name
@@ -265,9 +287,9 @@ export default {
   },
   async fetch() {
     this.isBusy = !this.isBusy;
-    const response = await this.$axios.get(
-      `death_certificate_form/report/${this.genPage()}${this.genSearch()}`
-    );
+    const response = await this.$axios.get(this.url, {
+      params: this.params,
+    });
     await response.data.data.forEach((healthUnit) => {
       healthUnit.percent =
         (healthUnit.stock_form_alive / 100) * healthUnit.stock;
@@ -326,17 +348,6 @@ export default {
     welcomeMessage() {
       this.$store.commit('layout/CHANGE_NAV_TITLE', 'Usuários');
     },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        timeout: 10000,
-        type: type,
-      });
-    },
     selectAll() {
       this.listHealthUnit.forEach((healthUnit) => {
         this.selectedHealthUnit.push(healthUnit.id);
@@ -372,82 +383,8 @@ export default {
       this.totalRows = await response.data.total;
       this.isBusy = !this.isBusy;
     },
-    genPage() {
-      return `?per_page=${this.perPage}&page=${this.currentPage}`;
-    },
-    genSearch() {
-      if (this.search.length > 3) {
-        return `&search=${this.search}`;
-      } else {
-        return '';
-      }
-    },
-    genFilterDate() {
-      if (this.searchDate.start != null && this.searchDate.end != null) {
-        const start = new Date(this.searchDate.start);
-        const end = new Date(this.searchDate.end);
-        if (start > end) {
-          return '';
-        }
-        return (
-          '&start=' + this.searchDate.start + '&end=' + this.searchDate.end
-        );
-      } else {
-        return '';
-      }
-    },
     searchHandler() {
       this.getHealthUnit();
-    },
-    async exportData() {
-      this.perPage = 100000;
-      const response = await this.$axios.get(
-        `death_certificate_form/report/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`
-      );
-
-      const items = [];
-
-      response.data.data.forEach((healthUnit) => {
-        delete healthUnit.latitude;
-        delete healthUnit.longitude;
-        delete healthUnit.stock_form_alive;
-        delete healthUnit.stock_form_death;
-        items.push(healthUnit);
-      });
-      const today = new Date().toISOString().slice(0, 10);
-      const data = XLSX.utils.json_to_sheet(items);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, data, 'data');
-      XLSX.writeFile(wb, `${today}-do.xlsx`);
-      this.perPage = 10;
-    },
-    async reportPdf() {
-      try {
-        this.perPage = 100000;
-        const response = await this.$axios.get(
-          `death_certificate_form/report/pdf/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`,
-          {
-            responseType: 'blob',
-          }
-        );
-        const today = new Date().toISOString().slice(0, 10);
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        // const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.target = '_blank';
-        link.download = `${today}-relatório-do.pdf`;
-        link.click();
-        // window.open(url);
-        // console.log(response);
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
-      }
-      this.perPage = 10;
     },
   },
 };
