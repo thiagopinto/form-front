@@ -10,7 +10,8 @@
             </p>
             <NuxtLink
               :to="`/datasets/load/datasus/sim/${initial}`"
-              class="btn btn-primary">
+              class="btn btn-primary"
+            >
               Enviar arquivo
             </NuxtLink>
           </div>
@@ -25,7 +26,8 @@
             </p>
             <NuxtLink
               :to="`/datasets/load/datasus/sinasc/${initial}`"
-              class="btn btn-primary">
+              class="btn btn-primary"
+            >
               Enviar arquivo
             </NuxtLink>
           </div>
@@ -45,5 +47,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

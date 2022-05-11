@@ -1,9 +1,9 @@
 export const state = () => ({
-  title: 'NEV'
+  title: 'NEV',
 });
 
 export const mutations = {
-  CHANGE_NAV_TITLE (state, title) {
+  CHANGE_NAV_TITLE(state, title) {
     state.title = title;
-  }
+  },
 };

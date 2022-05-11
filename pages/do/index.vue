@@ -5,9 +5,9 @@
         <div class="col-sm-12 col-md-2">
           <b-form-group description="Data início da pesquisa">
             <b-form-input
+              v-model="searchDate.start"
               placeholder="Inicio"
               name="search-date-start"
-              v-model="searchDate.start"
               type="date"
             ></b-form-input>
           </b-form-group>
@@ -19,9 +19,9 @@
             :state="stateDate"
           >
             <b-form-input
+              v-model="searchDate.end"
               placeholder="Fim"
               name="search-date-end"
-              v-model="searchDate.end"
               type="date"
               :state="stateDate"
             ></b-form-input>
@@ -36,14 +36,14 @@
           <b-form-group description="Termo para pesquisa">
             <b-input-group>
               <b-form-input
-                placeholder="Buscar..."
                 v-model="search"
-                @input="searchHandler"
+                placeholder="Buscar..."
                 type="search"
+                @input="searchHandler"
               ></b-form-input>
               <b-input-group-append>
                 <b-input-group-text>
-                  <font-awesome-icon :icon="['fas', 'search']" />
+                  <b-icon icon="search" />
                 </b-input-group-text>
               </b-input-group-append>
             </b-input-group>
@@ -53,36 +53,36 @@
       <div class="row">
         <div class="col-8">
           <b-button variant="info" class="mb-2 mt-2 pt-2 pb-2">
-            <font-awesome-icon :icon="['far', 'eye']" />
+            <b-icon icon="eye" />
           </b-button>
           <b-button variant="warning" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="1"
               v-model="status"
+              :value="1"
               class="mb-0 mt-0 pt-0 pb-0"
               >Estoque</b-form-checkbox
             >
           </b-button>
           <b-button variant="danger" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="2"
               v-model="status"
+              :value="2"
               class="mb-0 mt-0 pt-0 pb-0"
               >Distribuidos</b-form-checkbox
             >
           </b-button>
           <b-button variant="success" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="3"
               v-model="status"
+              :value="3"
               class="mb-0 mt-0 pt-0 pb-0"
               >Recebidos</b-form-checkbox
             >
           </b-button>
           <b-button variant="outline-primary" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="4"
               v-model="status"
+              :value="4"
               class="mb-0 mt-0 pt-0 pb-0"
               >Nulos</b-form-checkbox
             >
@@ -92,32 +92,32 @@
           </b-button>
         </div>
         <div class="col-3">
-          <add-form
+          <FormsAdd
             :item="null"
             :url="url"
-            iconButton="plus"
+            icon-button="plus"
             type="input"
             title="Receber Fichas"
-            @addForm="getForms"
             variant="warning"
-          ></add-form>
-          <send-form
+            @addForm="getForms"
+          ></FormsAdd>
+          <FormsSend
             :item="null"
             :url="url"
-            iconButton="paper-plane"
+            icon-button="arrow-up-right-square"
             type="send"
             title="Enviar Fichas"
-            @addForm="getForms"
             variant="danger"
-          ></send-form>
-          <b-button
+            @addForm="getForms"
+          ></FormsSend>
+          <NuxtLink
             v-b-tooltip.hover
+            class="btn btn-info"
             title="Relatórios"
-            variant="info"
             to="/do/report"
           >
-            <font-awesome-icon :icon="['far', 'chart-bar']" />
-          </b-button>
+            <b-icon icon="bar-chart" />
+          </NuxtLink>
         </div>
       </div>
       <div class="row justify-content-between">
@@ -133,75 +133,75 @@
               primary-key="id"
               :tbody-transition-props="transProps"
             >
-              <template v-slot:cell(id)="data">
+              <template #cell(id)="data">
                 {{ data.item.id }}
               </template>
-              <template v-slot:cell(number)="data">
+              <template #cell(number)="data">
                 {{ data.item.number }}
               </template>
-              <template v-slot:cell(cnes_code)="data">
+              <template #cell(cnes_code)="data">
                 {{ data.item.cnes_code }}
               </template>
-              <template v-slot:cell(email)="data">
+              <template #cell(email)="data">
                 {{ data.item.alias_company_name }}
               </template>
-              <template v-slot:cell(name)="data">
+              <template #cell(name)="data">
                 {{ data.item.name }}
               </template>
-              <template v-slot:cell(event_date)="data">
+              <template #cell(event_date)="data">
                 {{ data.item.event_date }}
               </template>
-              <template v-slot:cell(action)="data">
+              <template #cell(action)="data">
                 <div v-if="data.item.status == 2">
                   <b-button
+                    v-b-tooltip.hover
                     class="m-0"
                     size="sm"
                     variant="light"
-                    @click="cancel(data.item)"
-                    v-b-tooltip.hover
                     title="Anular"
+                    @click="cancel(data.item)"
                   >
-                    <font-awesome-icon :icon="['far', 'times-circle']" />
+                    <b-icon icon="x-square" />
                   </b-button>
-                  <receivement-form
+                  <FormsReceivement
                     :item="data.item"
                     :url="url"
-                    eventName="óbito"
+                    event-name="óbito"
                     type="input"
                     title="Preenchimento de ficha"
-                    @addForm="getForms"
                     variant="success"
+                    @addForm="getForms"
                   >
-                    <font-awesome-icon
+                    <b-icon
                       v-b-tooltip.hover
                       title="Receber"
-                      :icon="['fas', 'edit']"
+                      icon="pencil-square"
                     />
-                  </receivement-form>
+                  </FormsReceivement>
 
                   <b-button
+                    v-b-tooltip.hover
                     class="m-0"
                     size="sm"
                     variant="danger"
-                    @click="receipt(data.item)"
-                    v-b-tooltip.hover
                     title="Imprimir Recibo"
+                    @click="receipt(data.item)"
                   >
-                    <font-awesome-icon :icon="['fas', 'print']" />
+                    <b-icon icon="printer" />
                   </b-button>
 
                   <b-button
+                    v-b-tooltip.hover
                     class="m-0"
                     size="sm"
                     variant="warning"
-                    @click="reversal(data.item)"
-                    v-b-tooltip.hover
                     title="Estorno"
+                    @click="reversal(data.item)"
                   >
-                    <font-awesome-icon :icon="['fas', 'backspace']" />
+                    <b-icon icon="arrow-down-left-square" />
                   </b-button>
                 </div>
-                <div class="row m-0 p-0" v-if="data.item.status == 4">
+                <div v-if="data.item.status == 4" class="row m-0 p-0">
                   <div class="col-12 m-0 p-0">
                     <b-button
                       class="m-0"
@@ -213,7 +213,7 @@
                     </b-button>
                   </div>
                 </div>
-                <div class="row m-0 p-0" v-if="data.item.status == 3">
+                <div v-if="data.item.status == 3" class="row m-0 p-0">
                   <div class="col-12 m-0 p-0">
                     <b-button
                       class="m-0"
@@ -235,8 +235,8 @@
                 :total-rows="totalRows"
                 :per-page="perPage"
                 limit="8"
-                @input="getForms"
                 class="pagination-danger"
+                @input="getForms"
               ></b-pagination>
             </div>
             <div class="col-sm-12 col-md-2">
@@ -253,21 +253,8 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-// import EditForm from '~/components/Forms/EditForm.vue';
-import AddForm from '~/components/Forms/AddForm.vue';
-import SendForm from '~/components/Forms/SendForm.vue';
-import ReceivementForm from '~/components/Forms/ReceivementForm.vue';
-import notify from '@/mixins/notify';
-
 export default {
-  mixins: [notify],
-  components: {
-    // EditForm,
-    AddForm,
-    SendForm,
-    ReceivementForm,
-  },
+  name: 'DoPage',
   data() {
     return {
       marker: require('@/assets/img/marker_health_unit.png'),
@@ -297,7 +284,6 @@ export default {
       currentPage: 1,
       totalRows: 0,
       search: '',
-      pathImages: this.$store.state.paths.pathImages,
       perPageOptions: [5, 10, 50, 100],
       url: 'death_certificate_form/',
       status: [1, 2, 3, 4],
@@ -353,7 +339,12 @@ export default {
       return null;
     },
   },
-  created: function() {
+  watch: {
+    status() {
+      this.getForms();
+    },
+  },
+  created() {
     this.welcomeMessage();
   },
   mounted() {
@@ -383,13 +374,30 @@ export default {
             ids: this.selectedHealthUnit,
           }
         );
-        await this.notifyVue('top', 'center', 'Atualizado', 'success');
+        this.$bvToast.toast('Atualizado!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
+        });
         this.isLoad = false;
         this.getForms();
-      } catch (error) {
+      } catch (errors) {
         this.isLoad = false;
-        console.log(error);
-        return await error.response;
+        console.log(errors);
+
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
+
+        return await errors.response;
       }
     },
     async getCount(status) {
@@ -533,11 +541,6 @@ export default {
           error.toString();
         console.log(message);
       }
-    },
-  },
-  watch: {
-    status: function() {
-      this.getForms();
     },
   },
 };

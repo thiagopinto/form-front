@@ -30,18 +30,17 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from "~/components/Notifications/NotificationTemplate";
-
 export default {
+  name: 'ResetPasswordPage',
   components: {},
   data() {
     return {
       email: null,
       show: false,
-      url: "forgot-password"
+      url: 'forgot-password',
     };
   },
-  created: function() {
+  created() {
     this.welcomeMessage();
   },
   methods: {
@@ -53,39 +52,38 @@ export default {
         await this.$axios.post(
           `${this.url}`,
           {
-            email: this.email
+            email: this.email,
           },
           {
-            timeout: 30000
+            timeout: 30000,
           }
         );
 
-        this.notifyVue("top", "center", "Email enviado", "success");
+        this.$bvToast.toast('Email enviado!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
+        });
+
         this.show = false;
-      } catch (error) {
-        this.notifyVue(
-          "top",
-          "center",
-          JSON.stringify(error.response.data),
-          "danger"
-        );
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
-    },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: "fas fa-exclamation-circle",
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        type: type
-      });
     },
     handleSubmit() {
       this.activeUser();
       this.$nextTick(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
-<style></style>

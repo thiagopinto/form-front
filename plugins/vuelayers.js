@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueLayers from 'vuelayers';
-import 'vuelayers/lib/style.css'; // needs css-loader
+import 'vuelayers/dist/vuelayers.css';
+// needs css-loader
 
 Vue.use(VueLayers, {
-  dataProjection: 'EPSG:4326'
+  dataProjection: 'EPSG:4326',
 });

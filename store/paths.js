@@ -1,5 +1,5 @@
 const origin = '';
 
 export const state = () => ({
-  pathImages: origin
+  pathImages: origin,
 });

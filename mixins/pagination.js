@@ -21,10 +21,8 @@ export default {
     genSearch(params) {
       if (this.search.length > 3) {
         params.search = this.search;
-      } else {
-        if (params.search !== null) {
-          delete params.search;
-        }
+      } else if (params.search !== null) {
+        delete params.search;
       }
       return params;
     },

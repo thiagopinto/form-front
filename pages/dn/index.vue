@@ -5,22 +5,19 @@
         <div class="col-sm-12 col-md-2">
           <b-form-group description="Data início da pesquisa">
             <b-form-input
+              v-model="searchDate.start"
               placeholder="Inicio"
               name="search-date-start"
-              v-model="searchDate.start"
               type="date"
             ></b-form-input>
           </b-form-group>
         </div>
         <div class="col-sm-12 col-md-2">
-          <b-form-group
-            description="Data fim da pesquisa"
-            :state="stateDate"
-          >
+          <b-form-group description="Data fim da pesquisa" :state="stateDate">
             <b-form-input
+              v-model="searchDate.end"
               placeholder="Fim"
               name="search-date-end"
-              v-model="searchDate.end"
               type="date"
               :state="stateDate"
             ></b-form-input>
@@ -35,14 +32,14 @@
           <b-form-group description="Termo para pesquisa">
             <b-input-group>
               <b-form-input
-                placeholder="Buscar..."
                 v-model="search"
-                @input="searchHandler"
+                placeholder="Buscar..."
                 type="search"
+                @input="searchHandler"
               ></b-form-input>
               <b-input-group-append>
                 <b-input-group-text>
-                  <font-awesome-icon :icon="['fas', 'search']" />
+                  <b-icon icon="search" />
                 </b-input-group-text>
               </b-input-group-append>
             </b-input-group>
@@ -52,36 +49,36 @@
       <div class="row">
         <div class="col-8">
           <b-button variant="info" class="mb-2 mt-2 pt-2 pb-2">
-            <font-awesome-icon :icon="['far', 'eye']" />
+            <b-icon icon="eye" />
           </b-button>
           <b-button variant="warning" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="1"
               v-model="status"
+              :value="1"
               class="mb-0 mt-0 pt-0 pb-0"
               >Estoque</b-form-checkbox
             >
           </b-button>
           <b-button variant="danger" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="2"
               v-model="status"
+              :value="2"
               class="mb-0 mt-0 pt-0 pb-0"
               >Distribuidos</b-form-checkbox
             >
           </b-button>
           <b-button variant="success" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="3"
               v-model="status"
+              :value="3"
               class="mb-0 mt-0 pt-0 pb-0"
               >Recebidos</b-form-checkbox
             >
           </b-button>
           <b-button variant="outline-primary" class="mb-1 mt-1 pt-1 pb-1">
             <b-form-checkbox
-              :value="4"
               v-model="status"
+              :value="4"
               class="mb-0 mt-0 pt-0 pb-0"
               >Nulos</b-form-checkbox
             >
@@ -91,27 +88,30 @@
           </b-button>
         </div>
         <div class="col-3">
-          <add-form
-            :item="null"
+          <FormsAdd
             :url="url"
-            iconButton="plus"
+            icon-button="plus"
             type="input"
             title="Receber Fichas"
-            @addForm="getForms"
             variant="warning"
-          ></add-form>
-          <send-form
-            :item="null"
+            @addForm="getForms"
+          ></FormsAdd>
+          <FormsSend
             :url="url"
-            iconButton="paper-plane"
+            icon-button="arrow-up-right-square"
             type="send"
             title="Enviar Fichas"
-            @addForm="getForms"
             variant="danger"
-          ></send-form>
-          <b-button v-b-tooltip.hover title="Relatórios" variant="info" to="/dn/report">
-            <font-awesome-icon :icon="['far', 'chart-bar']" />
-          </b-button>
+            @addForm="getForms"
+          ></FormsSend>
+          <NuxtLink
+            v-b-tooltip.hover
+            class="btn btn-info"
+            title="Relatórios"
+            to="/dn/report"
+          >
+            <b-icon icon="bar-chart" />
+          </NuxtLink>
         </div>
       </div>
       <div class="row justify-content-between">
@@ -127,74 +127,74 @@
               primary-key="id"
               :tbody-transition-props="transProps"
             >
-              <template v-slot:cell(id)="data">
+              <template #cell(id)="data">
                 {{ data.item.id }}
               </template>
-              <template v-slot:cell(number)="data">
+              <template #cell(number)="data">
                 {{ data.item.number }}
               </template>
-              <template v-slot:cell(cnes_code)="data">
+              <template #cell(cnes_code)="data">
                 {{ data.item.cnes_code }}
               </template>
-              <template v-slot:cell(email)="data">
+              <template #cell(email)="data">
                 {{ data.item.alias_company_name }}
               </template>
-              <template v-slot:cell(name)="data">
+              <template #cell(name)="data">
                 {{ data.item.name }}
               </template>
-              <template v-slot:cell(event_date)="data">
+              <template #cell(event_date)="data">
                 {{ data.item.event_date }}
               </template>
-              <template v-slot:cell(action)="data">
+              <template #cell(action)="data">
                 <div v-if="data.item.status == 2">
                   <b-button
+                    v-b-tooltip.hover
                     class="m-0"
                     size="sm"
                     variant="light"
-                    @click="cancel(data.item)"
-                    v-b-tooltip.hover
                     title="Anular"
+                    @click="cancel(data.item)"
                   >
-                    <font-awesome-icon :icon="['far', 'times-circle']" />
+                    <b-icon icon="x-square" />
                   </b-button>
-                  <receivement-form
+                  <FormsReceivement
                     :item="data.item"
                     :url="url"
-                    eventName="nascimento"
+                    event-name="nascimento"
                     type="input"
                     title="Preenchimento de ficha"
-                    @addForm="getForms"
                     variant="success"
+                    @addForm="getForms"
                   >
-                    <font-awesome-icon
+                    <b-icon
                       v-b-tooltip.hover
                       title="Receber"
-                      :icon="['fas', 'edit']"
+                      icon="pencil-square"
                     />
-                  </receivement-form>
+                  </FormsReceivement>
 
                   <b-button
+                    v-b-tooltip.hover
+                    title="Imprimir Recibo"
                     class="m-0"
                     size="sm"
                     variant="danger"
                     @click="receipt(data.item)"
-                    v-b-tooltip.hover
-                    title="Imprimir Recibo"
                   >
-                    <font-awesome-icon :icon="['fas', 'print']" />
+                    <b-icon icon="printer" />
                   </b-button>
                   <b-button
+                    v-b-tooltip.hover
+                    title="Estorno"
                     class="m-0"
                     size="sm"
                     variant="danger"
                     @click="reversal(data.item)"
-                    v-b-tooltip.hover
-                    title="Estorno"
                   >
-                    <font-awesome-icon :icon="['fas', 'print']" />
+                    <b-icon icon="arrow-down-left-square" />
                   </b-button>
                 </div>
-                <div class="row m-0 p-0" v-if="data.item.status == 4">
+                <div v-if="data.item.status == 4" class="row m-0 p-0">
                   <div class="col-12 m-0 p-0">
                     <b-button
                       class="m-0"
@@ -206,7 +206,7 @@
                     </b-button>
                   </div>
                 </div>
-                <div class="row m-0 p-0" v-if="data.item.status == 3">
+                <div v-if="data.item.status == 3" class="row m-0 p-0">
                   <div class="col-12 m-0 p-0">
                     <b-button
                       class="m-0"
@@ -228,8 +228,8 @@
                 :total-rows="totalRows"
                 :per-page="perPage"
                 limit="8"
-                @input="getForms"
                 class="pagination-danger"
+                @input="getForms"
               ></b-pagination>
             </div>
             <div class="col-sm-12 col-md-2">
@@ -246,19 +246,9 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-// import EditForm from '~/components/Forms/EditForm.vue';
-import AddForm from '~/components/Forms/AddForm.vue';
-import SendForm from '~/components/Forms/SendForm.vue';
-import ReceivementForm from '~/components/Forms/ReceivementForm.vue';
-
 export default {
-  components: {
-    // EditForm,
-    AddForm,
-    SendForm,
-    ReceivementForm
-  },
+  name: 'DnPage',
+  components: {},
   data() {
     return {
       marker: require('@/assets/img/marker_health_unit.png'),
@@ -272,15 +262,15 @@ export default {
         {
           key: 'alias_company_name',
           label: 'Unidade',
-          sortable: true
+          sortable: true,
         },
         { key: 'name', label: 'Nome', sortable: true },
         { key: 'event_date', label: 'Data', sortable: true },
-        { key: 'action', label: 'Ações' }
+        { key: 'action', label: 'Ações' },
       ],
       transProps: {
         // Transition name
-        name: 'flip-list'
+        name: 'flip-list',
       },
       selectedHealthUnit: [],
       listForm: [],
@@ -288,15 +278,14 @@ export default {
       currentPage: 1,
       totalRows: 0,
       search: '',
-      pathImages: this.$store.state.paths.pathImages,
       perPageOptions: [5, 10, 50, 100],
       url: 'born_alive_form/',
       status: [1, 2, 3, 4],
       searchDate: {
         start: null,
-        end: null
+        end: null,
       },
-      stock: 0
+      stock: 0,
     };
   },
   async fetch() {
@@ -331,9 +320,14 @@ export default {
         return null;
       }
       return null;
-    }
+    },
   },
-  created: function() {
+  watch: {
+    status() {
+      this.getForms();
+    },
+  },
+  created() {
     this.welcomeMessage();
   },
   mounted() {
@@ -349,19 +343,8 @@ export default {
         'Lista de formulários de Declaração de Nascimento'
       );
     },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        timeout: 10000,
-        type: type
-      });
-    },
     selectAll() {
-      this.listForm.forEach(healthUnit => {
+      this.listForm.forEach((healthUnit) => {
         this.selectedHealthUnit.push(healthUnit.id);
       });
     },
@@ -413,7 +396,7 @@ export default {
       }
     },
     colorLines() {
-      this.listForm.forEach(form => {
+      this.listForm.forEach((form) => {
         if (form.status === 1) {
           form._rowVariant = 'warning';
         } else if (form.status === 2) {
@@ -431,12 +414,17 @@ export default {
         item._rowVariant = 'light';
         await this.$axios.patch(`${this.url}${item.id}`, item);
         this.getForms();
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
     },
     async active(item) {
@@ -445,12 +433,17 @@ export default {
         item._rowVariant = 'danger';
         await this.$axios.patch(`${this.url}${item.id}`, item);
         this.getForms();
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
     },
     async fill(item) {
@@ -459,12 +452,17 @@ export default {
         item._rowVariant = 'success';
         await this.$axios.patch(`${this.url}${item.id}`, item);
         this.getForms();
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
     },
     async reversal(item) {
@@ -473,12 +471,17 @@ export default {
         item._rowVariant = 'warning';
         await this.$axios.patch(`${this.url}reversal/${item.id}`);
         this.getForms();
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
     },
     async receipt(item) {
@@ -486,7 +489,7 @@ export default {
         const response = await this.$axios.get(
           `${this.url}receipt/${item.id}`,
           {
-            responseType: 'blob'
+            responseType: 'blob',
           }
         );
         const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -497,20 +500,20 @@ export default {
         // link.click();
         window.open(url);
         // console.log(response);
-      } catch (error) {
-        const message =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-        console.log(message);
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
-    }
+    },
   },
-  watch: {
-    status: function() {
-      this.getForms();
-    }
-  }
 };
 </script>
 <style>

@@ -5,9 +5,9 @@
         <div class="col-sm-12 col-md-2">
           <b-form-group description="Data início da pesquisa">
             <b-form-input
+              v-model="searchDate.start"
               placeholder="Inicio"
               name="search-date-start"
-              v-model="searchDate.start"
               type="date"
             ></b-form-input>
           </b-form-group>
@@ -15,9 +15,9 @@
         <div class="col-sm-12 col-md-2">
           <b-form-group description="Data fim da pesquisa" :state="stateDate">
             <b-form-input
+              v-model="searchDate.end"
               placeholder="Fim"
               name="search-date-end"
-              v-model="searchDate.end"
               type="date"
               :state="stateDate"
             ></b-form-input>
@@ -42,14 +42,14 @@
           <b-form-group description="Termo para pesquisa">
             <b-input-group>
               <b-form-input
-                placeholder="Buscar..."
                 v-model="search"
-                @input="searchHandler"
+                placeholder="Buscar..."
                 type="search"
+                @input="searchHandler"
               ></b-form-input>
               <b-input-group-append>
                 <b-input-group-text>
-                  <font-awesome-icon :icon="['fas', 'search']" />
+                  <b-icon icon="search" />
                 </b-input-group-text>
               </b-input-group-append>
             </b-input-group>
@@ -69,31 +69,31 @@
               primary-key="cnes_code"
               :tbody-transition-props="transProps"
             >
-              <template v-slot:cell(id)="data">
+              <template #cell(id)="data">
                 {{ data.item.cnes_code }}
               </template>
-              <template v-slot:cell(name)="data">
+              <template #cell(name)="data">
                 {{ data.item.name }}
               </template>
-              <template v-slot:cell(received)="data">
+              <template #cell(received)="data">
                 {{ data.item.received }}
               </template>
-              <template v-slot:cell(used)="data">
+              <template #cell(used)="data">
                 {{ data.item.used }}
               </template>
-              <template v-slot:cell(canceled)="data">
+              <template #cell(canceled)="data">
                 {{ data.item.canceled }}
               </template>
-              <template v-slot:cell(stock)="data">
+              <template #cell(stock)="data">
                 {{ data.item.stock }}
               </template>
-              <template v-slot:cell(last_receipt)="data">
+              <template #cell(last_receipt)="data">
                 {{ data.item.last_receipt }}
               </template>
-              <template v-slot:cell(last_receipt_day)="data">
+              <template #cell(last_receipt_day)="data">
                 {{ data.item.last_receipt_day }}
               </template>
-              <template v-slot:cell(action)="data">
+              <template #cell(action)="data">
                 <b-button
                   class="mt-0"
                   variant="danger"
@@ -117,8 +117,8 @@
             v-model="currentPage"
             :total-rows="totalRows"
             :per-page="perPage"
-            @input="getHealthUnit"
             class="pagination-danger"
+            @input="getHealthUnit"
           ></b-pagination>
         </div>
         <div class="col-sm-12 col-md-2">
@@ -136,25 +136,25 @@
               :load-tiles-while-animating="true"
               :load-tiles-while-interacting="true"
               data-projection="EPSG:4326"
-              style="height: 500px;"
+              style="height: 500px"
             >
               <vl-view
                 :zoom.sync="zoom"
                 :center.sync="center"
                 :rotation.sync="rotation"
               ></vl-view>
-              <vl-layer-vector :z-index="1" id="layer-marker">
+              <vl-layer-vector id="layer-marker" :z-index="1">
                 <vl-source-vector
+                  id="vector-marker"
                   :features="healthUnitFeatures"
                   ident="vectorMarker"
-                  id="vector-marker"
                 >
                   <template v-for="healthUnit in listHealthUnit">
                     <vl-feature
+                      v-if="healthUnit.latitude && healthUnit.longitude"
                       :id="`marker-${healthUnit.cnes_code}`"
                       :ref="`marker-${healthUnit.cnes_code}`"
                       :key="healthUnit.cnes_code"
-                      v-if="healthUnit.latitude && healthUnit.longitude"
                     >
                       <vl-geom-point
                         :coordinates="[
@@ -162,13 +162,13 @@
                           parseFloat(healthUnit.latitude),
                         ]"
                       ></vl-geom-point>
-                      <vl-style-box>
+                      <vl-style>
                         <vl-style-icon
                           :src="marker"
                           :scale="0.4"
                           :anchor="[0.5, 1]"
                         ></vl-style-icon>
-                      </vl-style-box>
+                      </vl-style>
                       <vl-overlay
                         :position="[
                           parseFloat(healthUnit.longitude),
@@ -177,20 +177,13 @@
                         :offset="[-38.5, -66]"
                       >
                         <circle-progress
-                          :transitionDuration="5000"
+                          :transition-duration="5000"
                           :radius="30"
-                          :strokeWidth="10"
+                          :stroke-width="10"
                           :value="healthUnit.percent"
-                          :strokeColor="healthUnit.color"
+                          :stroke-color="healthUnit.color"
                         >
-                          <div
-                            class="content"
-                            style="
-                              background-color: transparent;
-                              padding-top: 0px;
-                              margin-top: -5px;
-                            "
-                          >
+                          <div class="content">
                             {{ healthUnit.stock }}
                           </div>
                         </circle-progress>
@@ -204,19 +197,19 @@
               </vl-layer-vector>
               <!--
               <vl-interaction-modify source="vectorMarker">
-                <vl-style-box>
+                <vl-style>
                   <vl-style-circle :radius="5">
                     <vl-style-stroke color="green"></vl-style-stroke>
                     <vl-style-fill color="green"></vl-style-fill>
                   </vl-style-circle>
-                </vl-style-box>
+                </vl-style>
               </vl-interaction-modify>
               -->
               <vl-layer-tile id="osm">
                 <vl-source-osm></vl-source-osm>
               </vl-layer-tile>
             </vl-map>
-            <div style="padding: 20px;">
+            <div style="padding: 20px">
               Zoom: {{ zoom }}<br />
               Center: {{ center }}<br />
               Rotation: {{ rotation }}<br />
@@ -230,15 +223,14 @@
 </template>
 <script>
 import exports from '@/mixins/exports';
-import notify from '@/mixins/notify';
 import filters from '@/mixins/filters';
 import pagination from '@/mixins/pagination';
 import reports from '@/mixins/reports';
 
 export default {
-  names: 'DnReport',
-  mixins: [exports, notify, filters, reports, pagination],
+  name: 'DnReport',
   components: {},
+  mixins: [exports, filters, reports, pagination],
   data() {
     return {
       module: 'dn',
@@ -390,14 +382,22 @@ export default {
 };
 </script>
 <style>
-table#table-users .flip-list-move {
+table #table-users .flip-list-move {
   transition: transform 1s;
 }
+
 #layer-marker {
   z-index: 1;
 }
+
+.content {
+  background-color: transparent;
+  padding-top: 0;
+  margin-top: -5px;
+}
+
 .content-map {
-  background-color: rgba(244, 243, 239, 0.7);
+  background-color: rgb(244 243 239 / 70%);
   min-height: 100%;
   padding: 1px;
 }

@@ -9,7 +9,7 @@
             class="badge badge-pill badge-danger h-auto m-1 p-2"
           >
             <a class="inline-block" @click.prevent="onRemoveBadge(badge)">
-              <font-awesome-icon :icon="['far', 'times-circle']"/>
+              <b-icon :icon="x - circle" />
             </a>
 
             <template v-if="sortingProperty && indexProperty">
@@ -34,16 +34,13 @@
       </div>
     </div>
     <div class="">
-      <div
-        v-if="showList"
-        class="card text-center"
-      >
+      <div v-if="showList" class="card text-center">
         <div class="card-body p-0">
           <ul class="list-group">
             <li
-              class="list-group-item"
               v-for="item in allItems"
               :key="item.id"
+              class="list-group-item"
               @click="onSelectItem(item)"
             >
               <template v-if="sortingProperty && indexProperty">
@@ -63,14 +60,12 @@
 </template>
 
 <script>
-import notify from '@/mixins/notify';
 const sortBy = (key) => {
   return (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
 };
 
 export default {
   name: 'InputAutocompleteBadge',
-  mixins: [notify],
   props: {
     value: {
       type: Array,
@@ -142,12 +137,7 @@ export default {
       if (checkItem === undefined) {
         this.badges.push(item);
       } else {
-        this.notifyVue(
-          'top',
-          'center',
-          `Item já está na lista!`,
-          'danger'
-        );
+        this.$toast.error(`Item já está na lista!`);
         return false;
       }
 

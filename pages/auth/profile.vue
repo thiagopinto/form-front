@@ -1,68 +1,33 @@
 <template>
-  <div class="row justify-content-md-center">
-    <div class="col-xl-4 col-lg-5 col-md-6">
-      <user-card :user="user" @changeUser="getUser"> </user-card>
-      <div class="row">
-        <div class="col-6 text-center">
-          <UserForm
-            textButton="Editar"
-            :oldMember="user"
-            :id="user.id"
-            variant="primary"
-            @updateMember="getUser"
-          ></UserForm>
-        </div>
-        <div class="col-6 text-center">
-          <b-button variant="danger" @click="logout">Logout</b-button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <main class="form-signin">
+    <CardsUser :user="user"></CardsUser>
+  </main>
 </template>
+
 <script>
-import UserForm from '~/components/Forms/UserForm.vue';
-import UserCard from '~/components/Cards/SimpleUserCard';
+import is from '@/mixins/is';
 export default {
-  name: 'Profile',
+  name: 'ProfilePage',
+  mixins: [is],
   data() {
     return {
-      user: {
-      }
+      show: true,
+      user: this.$auth.user,
+      logo: require('@/assets/img/background.png'),
     };
   },
-  components: {
-    UserForm,
-    UserCard
-  },
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    }
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push('/auth/login');
-    }
-  },
-  methods: {
-    async getUser() {
-      try {
-        const response = await this.$axios.get(
-          `/me/`
-        );
-        this.user = await response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async logout() {
-      await this.$auth.logout();
-    }
-  },
-  created() {
-    if (this.currentUser) {
-      this.getUser();
-    }
-  }
+
+  methods: {},
 };
 </script>
+
+<style>
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

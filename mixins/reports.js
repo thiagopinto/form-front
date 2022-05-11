@@ -32,10 +32,13 @@ export default {
     async reportByHealthUnitPdf(healthUnit) {
       this.perPage = 100000;
       try {
-        const response = await this.$axios.get(`${this.url}health_unit/${healthUnit.cnes_code}/pdf/`, {
-          params: this.params,
-          responseType: 'blob',
-        });
+        const response = await this.$axios.get(
+          `${this.url}health_unit/${healthUnit.cnes_code}/pdf/`,
+          {
+            params: this.params,
+            responseType: 'blob',
+          }
+        );
         const today = new Date().toISOString().slice(0, 10);
         const blob = new Blob([response.data], { type: 'application/pdf' });
         // const url = window.URL.createObjectURL(blob);

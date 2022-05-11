@@ -5,7 +5,7 @@
       :load-tiles-while-animating="true"
       :load-tiles-while-interacting="true"
       data-projection="EPSG:4326"
-      style="height: 80vh;"
+      style="height: 80vh"
       @pointermove="setEventMap"
     >
       <vl-view
@@ -26,13 +26,13 @@
       <vl-layer-vector>
         <vl-source-vector ref="featureOverlay" :features.sync="featureOverlay">
         </vl-source-vector>
-        <vl-style-box>
+        <vl-style>
           <vl-style-stroke
             color="rgba(255,255,255,0.3)"
             :width="3"
           ></vl-style-stroke>
           <vl-style-fill color="rgba(10, 182, 255, 0.5)"></vl-style-fill>
-        </vl-style-box>
+        </vl-style>
       </vl-layer-vector>
 
       <slot name="layer-chart"> </slot>
@@ -258,7 +258,6 @@ export default {
         } else {
           ranges.push([i, Math.round(i * log, 2)]);
         }
-        console.log([i, Math.round(i * log, 2)]);
       }
 
       return ranges;
@@ -340,9 +339,8 @@ export default {
         if (occurrences.length - 1 === index) {
           this.rangesCount = this.generateRangeClass(serieCount);
 
-          this.rangesIncidence = this.generateRangeIncidenceClass(
-            serieIncidence
-          );
+          this.rangesIncidence =
+            this.generateRangeIncidenceClass(serieIncidence);
 
           this.coloringMap(occurrences);
         }

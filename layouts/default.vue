@@ -1,139 +1,247 @@
 <template>
-  <div id="app">
-    <notifications></notifications>
-    <nuxtjs-bootstrap-sidebar
-      :initShow.sync="initialShow"
-      :links.sync="links"
-      :fa="true"
-      theme="paper-theme"
-      align="left"
-      @sidebarChanged="onSidebarChanged"
-    >
-      <template v-slot:logo>
-        <b-img :src="logoMini" alt="Circle image"></b-img>
-        <div class="logo-title">
-          <h2>DVS</h2>
+  <div ref="container" class="flex-container">
+    <transition name="fade">
+      <div v-show="show" class="sidebar">
+        <b-navbar
+          toggleable="lg"
+          type="dark"
+          variant="primary"
+          class="justify-content-between"
+        >
+          <b-avatar variant="light" :src="logo"></b-avatar>
+          <b-navbar-brand>Nev</b-navbar-brand>
+          <b-button variant="outline-light" size="sm" @click="switchShow">
+            X
+          </b-button>
+        </b-navbar>
+        <ul class="list-group list-group-flush mt-2">
+          <li class="list-group-item">
+            <NuxtLink to="/" class="item">
+              <b-icon icon="bookmark"></b-icon>
+              Home
+            </NuxtLink>
+          </li>
+          <li class="list-group-item">
+            <NuxtLink to="/dn" class="item">
+              <b-icon icon="clipboard-check"></b-icon>
+              Formulários DN
+            </NuxtLink>
+          </li>
+          <li class="list-group-item">
+            <NuxtLink to="/do" class="item">
+              <b-icon icon="clipboard-check"></b-icon>
+              Formulários DO
+            </NuxtLink>
+          </li>
+          <li class="list-group-item">
+            <NuxtLink to="/health_unit" class="item">
+              <b-icon icon="fullscreen-exit"></b-icon>
+              Unidades de Saúde
+            </NuxtLink>
+          </li>
+          <li class="list-group-item">
+            <NuxtLink to="/sim" class="item">
+              <b-icon icon="pie-chart"></b-icon>
+              SIM
+            </NuxtLink>
+          </li>
+          <li class="list-group-item">
+            <NuxtLink to="/sinasc" class="item">
+              <b-icon icon="pie-chart"></b-icon>
+              SINASC
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </transition>
+    <div class="container-main">
+      <div class="row">
+        <div class="col">
+          <b-navbar
+            toggleable="lg"
+            type="dark"
+            variant="primary"
+            class="d-flex justify-content-end"
+          >
+            <b-navbar-brand href="#">{{ title }}</b-navbar-brand>
+
+            <b-collapse id="nav-collapse" is-nav>
+              <!-- Right aligned nav items -->
+              <b-navbar-nav
+                v-show="$auth.loggedIn"
+                class="ml-auto justify-content-end"
+              >
+                <b-nav-item-dropdown right>
+                  <!-- Using 'button-content' slot -->
+                  <template #button-content>
+                    <em>Usuário</em>
+                    <b-avatar size="sm"></b-avatar>
+                  </template>
+                  <NuxtLink v-show="isAdmin" to="/admin/" class="dropdown-item">
+                    Admin
+                  </NuxtLink>
+                  <NuxtLink
+                    v-show="isAdmin"
+                    to="/auth/profile"
+                    class="dropdown-item"
+                  >
+                    Profile
+                  </NuxtLink>
+                  <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+                </b-nav-item-dropdown>
+              </b-navbar-nav>
+            </b-collapse>
+
+            <NuxtLink
+              v-show="!$auth.loggedIn"
+              to="/auth/login"
+              class="btn btn-warning"
+            >
+              <b-icon icon="arrow-return-right"></b-icon>
+              Login
+            </NuxtLink>
+            <b-navbar-toggle
+              v-show="$auth.loggedIn"
+              target="nav-collapse"
+            ></b-navbar-toggle>
+            <button
+              v-show="!show"
+              type="button"
+              class="btn btn-primary"
+              @click="switchShow"
+            >
+              <b-icon icon="layout-text-sidebar"></b-icon>
+            </button>
+          </b-navbar>
         </div>
-      </template>
-      <template v-slot:footer> </template>
-      <template v-slot:navbar>
-        <b-navbar-brand class="text-danger">{{ title }}</b-navbar-brand>
-        <b-navbar-nav class="ml-auto mr-0" v-if="loggedIn">
-          <b-nav-item class="text-danger d-inline mt-0 mb-0">
-            <b-dropdown variant="outline-danger" size="sm" class="m-0">
-              <!-- Using 'button-content' slot -->
-              <template #button-content>
-                <em> Equipe </em>
-              </template>
-              <b-dropdown-item to="/users">Usuários</b-dropdown-item>
-            </b-dropdown>
-            <nuxt-link to="/auth/profile">
-              <div class="card d-inline text-danger">
-                <em class="pl-1">{{ authUser.name }} </em>
-                <div class="author d-inline">
-                  <img
-                    class="avatar border-white d-inline p-0 m-0"
-                    :src="face"
-                    :alt="authUser.name"
-                  />
-                </div>
-              </div>
-            </nuxt-link>
-          </b-nav-item>
-        </b-navbar-nav>
-
-        <b-navbar-nav class="ml-auto mr-0" v-else>
-          <b-nav-item to="/auth/login" class="text-danger">Login</b-nav-item>
-        </b-navbar-nav>
-      </template>
-
-      <template v-slot:content>
-        <transition name="bounce">
-          <Nuxt @welcomeMessage="setMessage" />
-        </transition>
-      </template>
-    </nuxtjs-bootstrap-sidebar>
+      </div>
+      <div class="p-2">
+        <Nuxt />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import NuxtjsBootstrapSidebar from 'nuxtjs-bootstrap-sidebar2';
-
+import is from '@/mixins/is';
 export default {
-  name: 'default',
-  components: {
-    NuxtjsBootstrapSidebar,
+  name: 'NuxtTutorial',
+  mixins: [is],
+  data() {
+    return {
+      show: true,
+      logo: require('@/assets/img/background.png'),
+    };
   },
   computed: {
     title() {
       return this.$store.state.layout.title;
     },
-    loggedIn() {
-      return this.$store.state.auth.loggedIn;
-    },
-    authUser() {
-      if (this.loggedIn) {
-        return this.$store.state.auth.user;
-      } else {
-        return {};
-      }
-    },
-    isSuperuser() {
-      if (this.$store.state.auth.user.is_superuser) {
-        return true;
-      } else {
-        return false;
-      }
-    },
   },
-  data() {
-    return {
-      message: 'DVS',
-      logoMini: require('@/assets/img/logo-mini.png'),
-      face: require('@/assets/img/face-0.jpg'),
-      initialShow: false,
-      links: [
-        { name: 'Home', href: { name: 'index' }, faIcon: ['fas', 'home'] },
-        {
-          name: 'Declaração de Óbito',
-          href: { name: 'do' },
-          faIcon: ['fas', 'cross'],
-        },
-        {
-          name: 'Declaração de Nascido',
-          href: { name: 'dn' },
-          faIcon: ['fas', 'star'],
-        },
-        {
-          name: 'Unidades de saúde',
-          href: { name: 'health_unit' },
-          faIcon: ['fas', 'hospital'],
-        },
-        {
-          name: 'Sim',
-          href: { name: 'sim' },
-          faIcon: ['fas', 'chart-pie'],
-        },
-        {
-          name: 'Sinasc',
-          href: { name: 'sinasc' },
-          faIcon: ['fas', 'chart-pie'],
-        },
-        {
-          name: 'Datasets',
-          href: { name: 'datasets' },
-          faIcon: ['fas', 'database'],
-        },
-      ],
-      categorysGroups: null,
-    };
+  mounted() {
+    this.checkSizeWindow();
+  },
+  destroy() {
+    // window.removeEventListener('resize', this.onResize)
   },
   methods: {
-    onSidebarChanged() {},
-    setMessage(data) {
-      this.message = data.message;
+    switchShow() {
+      this.show = !this.show;
+    },
+    checkSizeWindow(count = 10) {
+      this.$nextTick(() => {
+        if (window !== undefined) {
+          const width = window.document.documentElement.clientWidth;
+          this.show = !(width <= 991.98);
+          window.addEventListener('resize', this.onResize);
+        } else if (count > 0) {
+          this.checkSizeWindow(count - 1);
+        }
+      });
+    },
+    onResize(windowResize) {
+      const targetElement = windowResize.target || windowResize.srcElement;
+
+      if (targetElement !== undefined) {
+        const width = targetElement.document.documentElement.clientWidth;
+        this.show = !(width <= 991.98);
+      }
+    },
+    async logout() {
+      await this.$auth.logout();
     },
   },
-  async fetch() {},
 };
 </script>
+
+<style lang="scss" scoped>
+.flex-container {
+  display: flex;
+  background-color: #f1f4f6;
+}
+
+.container-main {
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5 px;
+  width: 100%;
+}
+
+.sidebar {
+  width: 280px;
+  height: 99vh;
+  padding: 0;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #fff;
+  box-shadow: 7px 0 60px rgba(0, 0, 0, 0.1);
+
+  .navbar {
+    min-height: 58px;
+  }
+
+  .item {
+    display: block;
+    width: 100%;
+    height: 42px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 10px;
+    color: #212529;
+    text-decoration: none;
+  }
+
+  .item.nuxt-link-exact-active {
+    background-color: rgba(229, 146, 56, 0.8);
+    color: #fff;
+    border-color: rgba(229, 146, 56, 0.1);
+  }
+
+  .item.nuxt-link-exact-active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(229, 146, 56, 0.8);
+    height: 100%;
+    width: 10px;
+    border-radius: 0 16px 16px 0;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    position: fixed;
+    z-index: 9999;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active em versões anteriores a 2.1.8 */ {
+  opacity: 0;
+}
+</style>

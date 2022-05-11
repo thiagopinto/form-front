@@ -2,22 +2,17 @@
   <div class="container-fluid">
     <b-sidebar id="filters" title="Filtros" width="368px" right shadow>
       <div class="px-3 py-2">
-        <CardCids
+        <CardsCids
           :loading.sync="loading"
           store="sim"
           @update="setAllFilters"
-        ></CardCids>
+        ></CardsCids>
       </div>
     </b-sidebar>
-    <b-navbar
-      toggleable="md"
-      type="dark"
-      variant="dark"
-      class="rounded-pill px-2 py-0"
-    >
+    <b-navbar toggleable="md" type="dark" variant="dark">
       <b-navbar-brand>
-        <b-button v-b-toggle.filters size="sm" class="m-0 px-2 rounded-circle">
-          <font-awesome-icon :icon="['fas', 'filter']" />
+        <b-button v-b-toggle.filters size="sm">
+          <b-icon icon="filter" />
         </b-button>
       </b-navbar-brand>
     </b-navbar>
@@ -28,7 +23,7 @@
         <div class="accordion" role="tablist">
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-0" role="tab">
-              <b-button block v-b-toggle.controllers variant="info" class="m-0">
+              <b-button v-b-toggle.controllers block variant="info" class="m-0">
                 Controles
               </b-button>
             </b-card-header>

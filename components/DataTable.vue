@@ -42,12 +42,13 @@
           </tbody>
         </table>
         <div class="p-1 flex justify-end">
-          <Pagination
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
             :per-page.sync="perPage"
-            :value.sync="currentPage"
-            :total="totalRows"
+            class="pagination-danger"
             @input="setPage"
-          ></Pagination>
+          ></b-pagination>
         </div>
       </div>
     </div>
@@ -175,7 +176,6 @@ export default {
 };
 </script>
 <style lang="postcss" scoped>
-
 .table :where(th, td) {
   white-space: initial;
 }

@@ -26,16 +26,14 @@ export default {
 
       if (this.$store.state[store].filter_groups_cids != null) {
         params.column_filter_or_range = [column];
-        params.term_filter_or_range = this.$store.state[
-          store
-        ].filter_groups_cids;
+        params.term_filter_or_range =
+          this.$store.state[store].filter_groups_cids;
       }
 
       if (this.$store.state[store].filter_chapters_cids != null) {
         params.column_filter_or_range = [column];
-        params.term_filter_or_range = this.$store.state[
-          store
-        ].filter_chapters_cids;
+        params.term_filter_or_range =
+          this.$store.state[store].filter_chapters_cids;
       }
 
       return params;

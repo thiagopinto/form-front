@@ -32,8 +32,6 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-
 export default {
   components: {},
   data() {
@@ -41,17 +39,17 @@ export default {
       uid: null,
       token: null,
       show: false,
-      url: 'auth/users/activation/'
+      url: 'auth/users/activation/',
     };
   },
-  created: function() {
+  created() {
     this.uid = this.$route.params.uid;
     this.token = this.$route.params.token;
     this.welcomeMessage();
   },
   methods: {
     welcomeMessage() {
-      this.$emit('welcomeMessage', { message: 'Ativar usuário' });
+      this.$store.commit('layout/CHANGE_NAV_TITLE', 'Ativar usuário');
     },
     async activeUser() {
       try {
@@ -59,40 +57,38 @@ export default {
           `${this.url}`,
           {
             uid: this.uid,
-            token: this.token
+            token: this.token,
           },
           {
-            timeout: 30000
+            timeout: 30000,
           }
         );
 
-        this.notifyVue('top', 'center', 'Usuário Ativado', 'success');
-      } catch (error) {
-        this.notifyVue(
-          'top',
-          'center',
-          JSON.stringify(error.response.data),
-          'danger'
-        );
+        this.$bvToast.toast('Usuário Ativado!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
+        });
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
-    },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        type: type
-      });
     },
     handleSubmit() {
       this.activeUser();
       this.$nextTick(() => {
         this.show = false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
-<style></style>

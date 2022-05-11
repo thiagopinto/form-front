@@ -7,8 +7,8 @@
             v-model="currentPage"
             :total-rows="totalRows"
             :per-page="perPage"
-            @input="getHealthUnit"
             class="pagination-danger"
+            @input="getHealthUnit"
           ></b-pagination>
         </div>
         <div class="col-sm-12 col-md-2">
@@ -21,10 +21,10 @@
         <div class="col-sm-12 col-md-4">
           <div class="input-group">
             <input
-              type="text"
               v-model="search"
-              @input="searchHandler"
+              type="text"
               class="form-control"
+              @input="searchHandler"
             />
             <div class="input-group-append">
               <span class="input-group-text">
@@ -34,15 +34,14 @@
           </div>
         </div>
       </div>
-      <div class="row justify-content-lg-end">
+      <div class="row justify-content-lg-end m-2">
         <FormsAddHealthUnit
-          :item="null"
           :url="url"
-          iconButton="plus"
+          icon-button="plus"
           type="input"
           title="Receber Fichas"
-          @addForm="getHealthUnit"
           variant="danger"
+          @addForm="getHealthUnit"
         ></FormsAddHealthUnit>
         <div class="col-3">
           <b-button block variant="info" @click="selectAll">
@@ -51,11 +50,7 @@
         </div>
         <div class="col-1">
           <b-button variant="info" @click="getGeoCode">
-            <font-awesome-icon
-              v-show="!isLoad"
-              :icon="['fas', 'globe-americas']"
-              size="1x"
-            />
+            <b-icon v-show="!isLoad" icon="globe" size="1x" />
             <b-spinner v-show="isLoad" small type="grow"></b-spinner>
           </b-button>
         </div>
@@ -73,35 +68,35 @@
               primary-key="id"
               :tbody-transition-props="transProps"
             >
-              <template v-slot:cell(id)="data">
+              <template #cell(id)="data">
                 {{ data.item.id }}
               </template>
-              <template v-slot:cell(cnes)="data">
+              <template #cell(cnes)="data">
                 {{ data.item.cnes }}
               </template>
-              <template v-slot:cell(alias_company_name)="data">
+              <template #cell(alias_company_name)="data">
                 {{ data.item.alias_company_name }}
               </template>
-              <template v-slot:cell(stock_form_death)="data">
+              <template #cell(stock_form_death)="data">
                 <b-form-input
-                  @change="setStock(data.item)"
                   v-model="data.item.stock_form_death"
+                  @change="setStock(data.item)"
                 ></b-form-input>
               </template>
-              <template v-slot:cell(stock_form_alive)="data">
+              <template #cell(stock_form_alive)="data">
                 <b-form-input
-                  @change="setStock(data.item)"
                   v-model="data.item.stock_form_alive"
+                  @change="setStock(data.item)"
                 ></b-form-input>
               </template>
 
-              <template v-slot:cell(latitude)="data">
+              <template #cell(latitude)="data">
                 {{ data.item.latitude }}
               </template>
-              <template v-slot:cell(longitude)="data">
+              <template #cell(longitude)="data">
                 {{ data.item.longitude }}
               </template>
-              <template v-slot:cell(geocode)="data">
+              <template #cell(geocode)="data">
                 <b-form-checkbox
                   :id="`health-unit-${data.item.id}`"
                   v-model="selectedHealthUnit"
@@ -110,15 +105,15 @@
                 >
                 </b-form-checkbox>
               </template>
-              <template v-slot:cell(action)="data">
+              <template #cell(action)="data">
                 <FormsAddHealthUnit
                   :item="data.item"
                   :url="url"
-                  iconButton="edit"
+                  icon-button="pencil"
                   type="input"
                   title="Receber Fichas"
-                  @addForm="getHealthUnit"
                   variant="danger"
+                  @addForm="getHealthUnit"
                 ></FormsAddHealthUnit>
               </template>
             </b-table>
@@ -132,25 +127,25 @@
               :load-tiles-while-animating="true"
               :load-tiles-while-interacting="true"
               data-projection="EPSG:4326"
-              style="height: 500px;"
+              style="height: 500px"
             >
               <vl-view
                 :zoom.sync="zoom"
                 :center.sync="center"
                 :rotation.sync="rotation"
               ></vl-view>
-              <vl-layer-vector :z-index="1" id="layer-marker">
+              <vl-layer-vector id="layer-marker" :z-index="1">
                 <vl-source-vector
+                  id="vector-marker"
                   :features="healthUnitFeatures"
                   ident="vectorMarker"
-                  id="vector-marker"
                 >
                   <template v-for="healthUnit in listHealthUnit">
                     <vl-feature
+                      v-if="healthUnit.latitude && healthUnit.longitude"
                       :id="`marker-${healthUnit.id}`"
                       :ref="`marker-${healthUnit.id}`"
                       :key="healthUnit.id"
-                      v-if="healthUnit.latitude && healthUnit.longitude"
                     >
                       <vl-geom-point
                         :coordinates="[
@@ -158,13 +153,13 @@
                           parseFloat(healthUnit.latitude),
                         ]"
                       ></vl-geom-point>
-                      <vl-style-box>
+                      <vl-style>
                         <vl-style-icon
                           :src="marker"
                           :scale="0.4"
                           :anchor="[0.5, 1]"
                         ></vl-style-icon>
-                      </vl-style-box>
+                      </vl-style>
                       <vl-overlay
                         :position="[
                           parseFloat(healthUnit.longitude),
@@ -182,19 +177,19 @@
               </vl-layer-vector>
               <!--
               <vl-interaction-modify source="vectorMarker">
-                <vl-style-box>
+                <vl-style>
                   <vl-style-circle :radius="5">
                     <vl-style-stroke color="green"></vl-style-stroke>
                     <vl-style-fill color="green"></vl-style-fill>
                   </vl-style-circle>
-                </vl-style-box>
+                </vl-style>
               </vl-interaction-modify>
               -->
               <vl-layer-tile id="osm">
                 <vl-source-osm></vl-source-osm>
               </vl-layer-tile>
             </vl-map>
-            <div style="padding: 20px;">
+            <div style="padding: 20px">
               Zoom: {{ zoom }}<br />
               Center: {{ center }}<br />
               Rotation: {{ rotation }}<br />
@@ -207,9 +202,8 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-
 export default {
+  name: 'HealthUnitPage',
   components: {},
   data() {
     return {
@@ -238,7 +232,6 @@ export default {
       currentPage: 1,
       totalRows: 0,
       search: '',
-      pathImages: this.$store.state.paths.pathImages,
       perPageOptions: [5, 10, 50, 100],
       zoom: 11,
       center: [-42.76052227179484, -5.095632087716865],
@@ -280,18 +273,7 @@ export default {
   },
   methods: {
     welcomeMessage() {
-      this.$store.commit('layout/CHANGE_NAV_TITLE', 'Usuários');
-    },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        timeout: 10000,
-        type: type,
-      });
+      this.$store.commit('layout/CHANGE_NAV_TITLE', 'Unidades de saúde');
     },
     selectAll() {
       this.listHealthUnit.forEach((healthUnit) => {
@@ -304,13 +286,30 @@ export default {
         await this.$axios.patch(`health_unit/?action=geo_reference`, {
           ids: this.selectedHealthUnit,
         });
-        await this.notifyVue('top', 'center', 'Atualizado', 'success');
+        this.$bvToast.toast('Atualizado!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
+        });
         this.isLoad = false;
         this.getHealthUnit();
-      } catch (error) {
+      } catch (errors) {
         this.isLoad = false;
-        console.log(error);
-        return await error.response;
+        console.log(errors);
+
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
+
+        return await errors.response;
       }
     },
     async setStock(item) {
@@ -349,9 +348,10 @@ export default {
 };
 </script>
 <style>
-table#table-users .flip-list-move {
+table #table-users .flip-list-move {
   transition: transform 1s;
 }
+
 #layer-marker {
   z-index: 1;
 }

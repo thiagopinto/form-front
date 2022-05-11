@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import { findPointOnSurface } from 'vuelayers/lib/ol-ext';
+import { findPointOnSurface } from 'vuelayers/dist/ol-ext';
 import PrintDialog from 'ol-ext/control/PrintDialog';
 import Print from 'ol-ext/control/Print';
 import LegendControl from 'ol-ext/control/Legend';
 import Legend from 'ol-ext/legend/Legend';
 import LegendItem from 'ol-ext/legend/Item';
 import Chart from 'ol-ext/style/Chart';
-import FlowLine from "ol-ext/style/FlowLine";
+import FlowLine from 'ol-ext/style/FlowLine';
 import 'ol-ext/dist/ol-ext.min.css';
 // needs css-loader
 
@@ -38,5 +38,5 @@ Vue.prototype.$olExt = {
   Legend,
   LegendItem,
   StyleChart: Chart,
-  FlowLine
+  FlowLine,
 };

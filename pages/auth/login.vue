@@ -1,183 +1,150 @@
 <template>
-  <div class="row align-items-center justify-content-center">
-    <div class="col-lg-4 col-md-12 align-self-center">
-      <validation-observer v-slot="{ invalid }">
-        <b-form @submit.stop.prevent="userLogin">
-          <b-card class="card-user" :img-src="background">
-            <template v-slot:header>
-              <!--
-              <b-img
-                thumbnail
-                :src="face"
-                :alt="user.first_name"
-                @error="imgUrlAlt"
-                rounded="circle"
-                width="150"
+  <main class="form-signin card">
+    <img :src="logo" class="card-img-top" alt="logo" />
+    <div class="card-body">
+      <ValidationObserver v-slot="{ invalid }">
+        <b-form v-if="show" @submit.stop.prevent="onSubmit" @reset="onReset">
+          <h1 class="h3 mb-3 fw-normal">Login</h1>
+
+          <ValidationProvider
+            v-slot="{ errors }"
+            name="E-mail"
+            rules="required|email"
+            immediate
+          >
+            <b-form-group
+              id="input-group-email"
+              label="Email:"
+              label-for="input-email"
+            >
+              <b-form-input
+                id="input-email"
+                v-model="user.email"
+                type="email"
+                placeholder="E-mail"
+                required
+              ></b-form-input>
+
+              <div
+                v-for="(error, index) in errors"
+                :key="index"
+                class="invalid-feedback d-block"
               >
-              </b-img>
-              -->
-            </template>
-            <b-card-body>
-              <validation-provider
-                name="Email"
-                :rules="{ required: true, email: true }"
-                v-slot="validationContext"
-              >
-                <b-form-group
-                  id="email-input-group"
-                  label="Name"
-                  label-for="email-input"
-                >
-                  <b-form-input
-                    id="email-input"
-                    name="email-input"
-                    v-model="user.email"
-                    :state="getValidationState(validationContext)"
-                    aria-describedby="email-live-feedback"
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback id="email-live-feedback">{{
-                    validationContext.errors[0]
-                  }}</b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
-
-              <validation-provider
-                name="Password"
-                :rules="{ required: true }"
-                v-slot="validationContext"
-              >
-                <b-form-group
-                  id="password-input-group"
-                  label="Password"
-                  label-for="password-input"
-                >
-                  <b-form-input
-                    id="password-input"
-                    name="password-input"
-                    type="password"
-                    v-model="user.password"
-                    :state="getValidationState(validationContext)"
-                    aria-describedby="password-live-feedback"
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback id="password-live-feedback">{{
-                    validationContext.errors[0]
-                  }}</b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
-            </b-card-body>
-
-            <hr />
-            <div class="text-center">
-              <div class="row justify-content-md-center">
-                <div class="col-6">
-                  <b-button class="ml-2" @click="resetForm()">Limpar</b-button>
-                </div>
-                <div class="col-6">
-                  <button
-                    class="btn btn-primary"
-                    type="submit"
-                    :disabled="invalid"
-                  >
-                    Entrar
-                  </button>
-                </div>
+                {{ error }}
               </div>
-              <div class="row justify-content-md-center">
-                <div class="col-12">
-                  <b-button variant="danger" to="/auth/reset/password"
-                    >Recuperar senha!</b-button
-                  >
-                </div>
+            </b-form-group>
+          </ValidationProvider>
+
+          <ValidationProvider
+            v-slot="{ errors }"
+            name="Senha"
+            rules="required"
+            immediate
+          >
+            <b-form-group
+              id="input-group-password"
+              label="Senha:"
+              label-for="input-password"
+            >
+              <b-form-input
+                id="input-password"
+                v-model="user.password"
+                type="password"
+                placeholder="Senha"
+                required
+              ></b-form-input>
+
+              <div
+                v-for="(error, index) in errors"
+                :key="index"
+                class="invalid-feedback d-block"
+              >
+                {{ error }}
               </div>
-            </div>
-          </b-card>
+            </b-form-group>
+          </ValidationProvider>
+          <button
+            class="w-100 btn btn-lg btn-primary"
+            type="submit"
+            :disabled="invalid"
+          >
+            Login
+          </button>
         </b-form>
-      </validation-observer>
+      </ValidationObserver>
     </div>
-  </div>
+  </main>
 </template>
+
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-const applicationToken = process.env.APPLICATION_TOKEN;
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 export default {
-  name: 'Login',
-  components: {},
+  name: 'LoginPage',
+  auth: 'guest',
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+  },
   data() {
     return {
+      show: true,
       user: {
         email: '',
-        password: ''
+        password: '',
       },
-      loading: false,
-      message: '',
-      face: require('@/assets/img/face-0.jpg'),
-      background: require('@/assets/img/background.png'),
-      isActiveFlip: false
+      logo: require('@/assets/img/background.png'),
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.loggedIn;
-    },
-    authUser() {
-      if (this.loggedIn) {
-        return this.$store.state.auth.user;
-      } else {
-        return {};
-      }
-    }
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push('/auth/profile');
-    }
-  },
+  mounted() {},
   methods: {
-    notifyVue(verticalAlign, horizontalAlign, message) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        type: 'danger'
-      });
-    },
-    getValidationState({ dirty, validated, valid = null }) {
-      return dirty || validated ? valid : null;
-    },
-    resetForm() {
-      this.user.email = '';
-      this.user.password = '';
-
-      this.$nextTick(() => {
-        this.$refs.observer.reset();
-      });
-    },
-
-    async userLogin() {
+    async onSubmit() {
       try {
-        await this.$auth.loginWith('laravelSanctum', {
+        const response = await this.$auth.loginWith('local', {
           data: {
-            application_token: applicationToken,
             email: this.user.email,
-            password: this.user.password
-          }
+            password: this.user.password,
+          },
         });
-      } catch (error) {
-        error.response.data.errors.email.forEach(passwordErro => {
-          this.notifyVue('top', 'center', passwordErro, 'danger');
+        this.$bvToast.toast('Login efetuado!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
         });
+        this.$auth.strategy.token.set(response.data.access_token);
+        this.$auth.setUser(response.data.user);
+        // Refresh tokens
+        this.$auth.refreshTokens();
+        this.$router.push('/');
+      } catch (errors) {
+        // const erros = error.response.data.data;
+        console.log(errors.response.data.data);
+        for (const prop in errors.response.data.data) {
+          errors.response.data.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
     },
-
-    imgUrlAlt(event) {
-      event.target.src = this.face;
-    }
-  }
+    onReset() {
+      console.log('onReset');
+    },
+  },
 };
 </script>
 
-<style></style>
+<style>
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

@@ -1,121 +1,33 @@
 export default {
-  globalName: 'NEV',
   env: {
     apiUrl: process.env.API_BASE_URL,
     baseUrl: process.env.BASE_URL,
-    isDemo: process.env.IS_DEMO,
-    apiKey: process.env.API_KEY,
     applicationToken: process.env.APPLICATION_TOKEN,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'NEV',
-    titleTemplate: 'NEV',
+    title: 'front-bootstrap',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: 'NEV Núcleo de Enventos vitais',
-      },
+      { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
-      { name: 'msapplication-TileColor', content: '#ffffff' },
-      { name: 'msapplication-TileImage', content: '/ms-icon-144x144.png' },
-      { name: 'theme-color', content: '#ffffff' },
     ],
-    link: [
-      {
-        rel: 'apple-touch-icon',
-        size: '57x57',
-        href: '/apple-icon-57x57.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '60x60',
-        href: '/apple-icon-60x60.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '72x72',
-        href: '/apple-icon-72x72.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '72x72',
-        href: '/apple-icon-72x72.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '76x76',
-        href: '/apple-icon-76x76.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '114x114',
-        href: '/apple-icon-114x114.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '120x120',
-        href: '/apple-icon-120x120.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '144x144',
-        href: '/apple-icon-144x144.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '152x152',
-        href: '/apple-icon-152x152.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '152x152',
-        href: '/apple-icon-152x152.png',
-      },
-      {
-        rel: 'apple-touch-icon',
-        size: '180x180',
-        href: '/apple-icon-180x180.png',
-      },
-      { rel: 'icon', size: '96x96', href: '/favicon-96x96.png' },
-      { rel: 'icon', size: '32x32', href: '/favicon-32x32.png' },
-      { rel: 'icon', size: '16x16', href: '/favicon-16x16.png' },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        size: '192x192',
-        href: '/android-icon-192x192.png',
-      },
-      { rel: 'manifest', href: '/site.webmanifest' },
-      { rel: 'manifest', href: '/manifest' },
-      { rel: 'mask-icon', href: 'mask-icon', color: 'ffffff' },
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-    ],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~assets/scss/paper.scss', '~assets/css/vue-croppa.css'],
+  css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/nuxtjs-bootstrap-sidebar' },
     { src: '~plugins/filter' },
     { src: '~/plugins/apexcharts', mode: 'client' },
-    { src: '~/plugins/vue2-editor', mode: 'client' },
-    { src: '~/plugins/autocomplete-vue', mode: 'client' },
     { src: '~/plugins/easy-circular-progress', mode: 'client' },
-    { src: '~/plugins/v-click-outside', mode: 'client' },
-    { src: '~/plugins/vue-lazytube', mode: 'client' },
-    { src: '~/plugins/vee-validate', mode: 'client' },
-    { src: '~/plugins/vue-notifyjs', mode: 'client' },
-    { src: '~/plugins/vue-croppa', mode: 'client' },
-    { src: '~/plugins/v-mask', mode: 'client' },
     { src: '~/plugins/vuelayers', mode: 'client' },
     { src: '~/plugins/ol-ext', mode: 'client' },
     { src: '~/plugins/ol', mode: 'client' },
+    { src: '~/plugins/v-click-outside', mode: 'client' },
     { src: '~/plugins/locale' },
     { src: '~/plugins/palette' },
     { src: '~/plugins/simple-statistics' },
@@ -129,50 +41,63 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/fontawesome',
-    // https://github.com/nuxt-community/moment-module
-    '@nuxtjs/moment',
-    // https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv',
-    // https://github.com/nuxt-community/style-resources-module
+    '@nuxtjs/stylelint-module',
+    // '@nuxtjs/style-resources'
     '@nuxtjs/style-resources',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
+    // https://github.com/nuxt-community/moment-module
+    [
+      '@nuxtjs/moment',
+      {
+        defaultLocale: 'pt-br',
+        locales: ['pt-br'],
+        defaultTimezone: 'America/Fortaleza',
+      },
+    ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://i18n.nuxtjs.org/
-    'nuxt-i18n',
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://dev.auth.nuxtjs.org/guide/setup
+    // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/pwa',
+    // https://github.com/lewyuburi/nuxt-validate
     '@nuxtjs/auth-next',
-    // https://sitemap.nuxtjs.org/guide/setup
-    '@nuxtjs/sitemap',
-    // https://saintplay.github.io/vue-swatches/guide
-    'vue-swatches/nuxt',
-    '~/modules/vuelayers',
-    '~/modules/autocomplete-vue',
+    [
+      'nuxt-validate',
+      {
+        fieldsBagName: 'veeFields',
+        lang: 'pt_BR',
+        nuxti18n: {
+          locale: {
+            'pt-BR': 'pt_BR',
+          },
+          rules: [
+            'required',
+            'min',
+            'max',
+            'size',
+            'length',
+            'confirmed',
+            'regex',
+          ],
+        },
+      },
+    ],
   ],
 
-  styleResources: {
-    sass: [],
-    scss: [
-      './assets/scss/*.scss',
-      // './assets/scss/paper/*.scss',
-      // './assets/scss/paper/mixins/*.scss'
-    ],
-    less: [],
-    stylus: [],
-    hoistUseStatements: true,
+  bootstrapVue: {
+    // Install the `IconsPlugin` plugin (in addition to `BootstrapVue` plugin)
+    icons: true,
   },
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-npmclearaxios
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: `${process.env.API_BASE_URL}/api/v1/`,
+    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    baseURL: `${process.env.API_BASE_URL}/api/v1`,
+    // proxy: true,
     credentials: true,
   },
 
@@ -184,52 +109,19 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: { transpile: ['nuxtjs-bootstrap-sidebar'] },
+  build: {},
 
-  fontawesome: {
-    icons: {
-      solid: [
-        'faUserSecret',
-        'faHome',
-        'faTint',
-        'faUsers',
-        'faPhone',
-        'faChild',
-        'faBars',
-        'faInfo',
-        'faConciergeBell',
-        'faBook',
-        'faProjectDiagram',
-        'faSearch',
-        'faSearchPlus',
-        'faSearchMinus',
-        'faEdit',
-        'faGraduationCap',
-        'faCross',
-        'faStar',
-        'faHospital',
-        'faGlobeAmericas',
-        'faPlus',
-        'faPaperPlane',
-        'faPrint',
-        'faBackspace',
-        'faChartPie',
-        'faDatabase',
-        'faFilter',
-        'faTimes',
-        'faChevronRight'
-      ],
-      regular: [
-        'faTimesCircle',
-        'faFileAlt',
-        'faNewspaper',
-        'faPlusSquare',
-        'faChartBar',
-        'faEye',
-        'faMap'
-      ],
-    },
+  styleResources: {
+    // your settings here
+    sass: [],
+    scss: ['assets/scss/style.scss'],
+    less: [],
+    stylus: [],
+    hoistUseStatements: true, // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
   },
+
+  // Config nuxt-validate
+
   auth: {
     cookie: {
       prefix: 'auth.',
@@ -239,60 +131,44 @@ export default {
         secure: true,
       },
     },
+    redirect: {
+      login: '/auth/login',
+      logout: '/',
+      callback: '/auth/login',
+      home: '/',
+    },
     strategies: {
-      laravelSanctum: {
-        provider: 'laravel/sanctum',
-        url: `${process.env.API_BASE_URL}/api/v1`,
+      local: {
+        scheme: 'refresh',
+        // url: `${process.env.API_BASE_URL}/api/v1`,
         token: {
           type: 'Bearer',
-          property: 'plainTextToken',
+          property: 'access_token',
+          maxAge: 60 * 24 * 6,
           global: true,
           required: true,
         },
+        refreshToken: {
+          property: 'access_token',
+          data: 'refresh_token',
+          maxAge: 60 * 60 * 24 * 30,
+        },
+        user: {
+          property: false,
+          autoFetch: true,
+        },
         endpoints: {
           login: { url: '/login/', method: 'post' },
-          logout: false,
-          user: { url: '/me/', method: 'get' },
+          logout: { url: '/logout/', method: 'post' },
+          refresh: { url: '/refresh/', method: 'post' },
+          user: { url: '/me/', method: 'post' },
         },
       },
     },
   },
-  layoutTransition: {
-    name: 'layouts',
-    mode: 'out-in',
-  },
-  pageTransition: {
-    name: 'page',
-    mode: 'out-in',
-  },
-  loading: {
-    color: '#e95e38',
-    height: '5px',
-  },
+
   router: {
-    extendRoutes(routes, resolve) {
-      routes.push(
-        {
-          name: 'auth-activate',
-          path: '/auth/activate/:uid/:token',
-          component: '~/pages/auth/activate/_uid.vue',
-        },
-        {
-          name: 'password-reset',
-          path: '/auth/reset/confirm/:token/:email',
-          component: '~/pages/auth/reset/confirm/_token.vue',
-        },
-        {
-          name: 'datasets-loads',
-          path: '/datasets/load/:source/:system/:initial',
-          component: '~/pages/datasets/_load.vue',
-        }
-      );
-    },
-  },
-  sitemap: {
-    hostname: process.env.BASE_URL,
-    gzip: true,
-    lastmod: '2021-08-03',
+    // linkExactActiveClass: 'active',
+    middleware: ['auth'],
   },
 };

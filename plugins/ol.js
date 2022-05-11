@@ -14,7 +14,7 @@ Vue.prototype.$ol = {
   RegularShape,
   geom: {
     Geometry,
-    LineString
+    LineString,
   },
   sphere: { ...sphere, ...sphereExt },
 };

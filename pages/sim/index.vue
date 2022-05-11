@@ -2,41 +2,33 @@
   <div class="container-fluid ml-0 mr-0 pl-0 pr-0">
     <b-sidebar id="filters" title="Filtros" width="368px" right shadow>
       <div class="px-3 py-2">
-        <CardCids
+        <CardsCids
           :loading.sync="loading"
           store="sim"
           @update="setAllFilters"
-        ></CardCids>
+        ></CardsCids>
       </div>
     </b-sidebar>
-    <b-navbar
-      toggleable="md"
-      type="dark"
-      variant="dark"
-      class="rounded-pill px-2 py-0"
-    >
+    <b-navbar toggleable="md" type="dark" variant="dark" class="px-2 py-0">
       <b-navbar-brand>
-        <b-button v-b-toggle.filters size="sm" class="m-0 px-2 rounded-circle">
-          <font-awesome-icon :icon="['fas', 'filter']" />
+        <b-button v-b-toggle.filters size="sm">
+          <b-icon icon="filter" />
         </b-button>
       </b-navbar-brand>
 
-      <b-navbar-nav type="dark" variant="dark">
-        <b-form-group v-slot="{ ariaDescribedby }">
-          <b-form-radio-group
-            v-model="isResident"
-            :options="residentOptions"
-            :aria-describedby="ariaDescribedby"
-            name="radio-inline"
-            button-variant="outline-danger btn-sm"
-            buttons
-          ></b-form-radio-group>
-        </b-form-group>
-      </b-navbar-nav>
+      <b-navbar-brand type="dark" variant="dark">
+        <b-form-radio-group
+          v-model="isResident"
+          :options="residentOptions"
+          name="radio-inline"
+          button-variant="outline-danger btn-sm"
+          buttons
+        ></b-form-radio-group>
+      </b-navbar-brand>
     </b-navbar>
     <div class="row">
       <div class="col-lg-4 col-md-6 col-sm-12 card-dashboard">
-        <CardDatasets
+        <CardsDatasets
           ref="cardDatasets"
           :title.sync="locationName"
           :url.sync="url"
@@ -44,7 +36,7 @@
           system="sim"
           :params.sync="paramsDatasets"
           @checked="changeDatasets"
-        ></CardDatasets>
+        ></CardsDatasets>
       </div>
       <div class="col-lg-4 col-md-6 col-sm-12 card-dashboard">
         <client-only>
@@ -381,6 +373,7 @@ export default {
     },
   },
   created() {
+    this.welcomeMessage();
     this.url = `${this.urlBase}${this.initial}`;
     this.urlSerie = `${this.urlBaseSerie}${this.initial}`;
     this.urlSerieRange = `${this.urlBaseSerieRange}${this.initial}`;
@@ -396,6 +389,9 @@ export default {
   activated() {},
   updated() {},
   methods: {
+    welcomeMessage() {
+      this.$store.commit('layout/CHANGE_NAV_TITLE', 'Tabulações do SIM');
+    },
     changeLocationState(initial) {
       this.$store.commit(`${this.module}/setInitial`, {
         initial,

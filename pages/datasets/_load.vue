@@ -8,7 +8,7 @@
         :initial="initial"
         @upload="upload"
       >
-        <template v-slot:table>
+        <template #table>
           <b-card class="text-center">
             <b-table
               id="table-born-alive-form"
@@ -19,16 +19,16 @@
               :busy="isBusy"
               primary-key="id"
             >
-              <template v-slot:cell(id)="data">
+              <template #cell(id)="data">
                 {{ data.item.id }}
               </template>
-              <template v-slot:cell(year)="data">
+              <template #cell(year)="data">
                 {{ data.item.year }}
               </template>
-              <template v-slot:cell(source)="data">
+              <template #cell(source)="data">
                 {{ data.item.source }}
               </template>
-              <template v-slot:cell(color)="data">
+              <template #cell(color)="data">
                 <v-swatches
                   v-model="data.item.color"
                   :wrapper-style="grid"
@@ -38,7 +38,7 @@
                   @input="changeColor($event, row[keyColumns])"
                 ></v-swatches>
               </template>
-              <template v-slot:cell(updated_at)="data">
+              <template #cell(updated_at)="data">
                 {{ data.item.updated_at }}
               </template>
             </b-table>
@@ -50,8 +50,8 @@
                 :total-rows="totalRows"
                 :per-page="perPage"
                 limit="8"
-                @input="getRows"
                 class="pagination-danger"
+                @input="getRows"
               ></b-pagination>
             </div>
             <div class="col-sm-12 col-md-2">
@@ -158,5 +158,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

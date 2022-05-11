@@ -20,7 +20,7 @@
             :location-name.sync="locationName"
             :params.sync="paramsSerieByIdade"
             :url.sync="urlSerieRange"
-            :codeSex="codeSex"
+            :code-sex="codeSex"
           ></BarChartAgePyramid>
         </client-only>
       </div>
@@ -60,7 +60,7 @@
             :location-name.sync="locationName"
             :params.sync="paramsSerieByIdadInfantil"
             :url.sync="urlSerieRange"
-            :codeSex="codeSex"
+            :code-sex="codeSex"
           ></BarChartAgePyramid>
         </client-only>
       </div>

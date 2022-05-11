@@ -25,26 +25,27 @@
                   <div class="row">
                     <div class="col-6">
                       <validation-provider
+                        v-slot="validationContext"
                         name="Senha"
                         :rules="{
-                          regex: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/,
-                          required: true
+                          regex:
+                            /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/,
+                          required: true,
                         }"
-                        v-slot="validationContext"
                       >
                         <b-form-group
+                          id="password-input-text"
                           label="Senha"
                           label-for="password-input"
-                          id="password-input-text"
                         >
                           <b-form-input
                             id="password-input"
+                            v-model="password"
                             name="password-input"
                             type="password"
                             label="Senha"
                             :state="getValidationState(validationContext)"
                             placeholder="Ex: Senha@123"
-                            v-model="password"
                             aria-describedby="password-live-feedback"
                           >
                           </b-form-input>
@@ -58,10 +59,10 @@
                     </div>
                     <div class="col-6">
                       <validation-provider
+                        id="password_confirmation-input-text"
+                        v-slot="validationContext"
                         name="Confirme a senha"
                         rules="required|password:@Senha"
-                        v-slot="validationContext"
-                        id="password_confirmation-input-text"
                       >
                         <b-form-group
                           label="Confirme a senha"
@@ -69,12 +70,12 @@
                         >
                           <b-form-input
                             id="password_confirmation-input"
+                            v-model="password_confirmation"
                             name="password_confirmation-input"
                             type="password"
                             label="Confirme a senha"
                             :state="getValidationState(validationContext)"
                             placeholder="Ex: Senha@123"
-                            v-model="password_confirmation"
                             aria-describedby="password_confirmation-live-feedback"
                           >
                           </b-form-input>
@@ -90,8 +91,8 @@
 
                   <button
                     class="btn btn-success btn-sm"
-                    @click="handleSubmit"
                     :disabled="invalid"
+                    @click="handleSubmit"
                   >
                     Alterar senha
                   </button>
@@ -105,8 +106,6 @@
   </div>
 </template>
 <script>
-import NotificationTemplate from '~/components/Notifications/NotificationTemplate';
-
 export default {
   components: {},
   data() {
@@ -116,10 +115,10 @@ export default {
       password: null,
       password_confirmation: null,
       show: false,
-      url: 'reset-password/'
+      url: 'reset-password/',
     };
   },
-  created: function() {
+  created() {
     this.token = this.$route.params.token;
     this.email = this.$route.params.email;
     this.welcomeMessage();
@@ -139,42 +138,39 @@ export default {
             token: this.token,
             email: this.email,
             password: this.password,
-            password_confirmation: this.password_confirmation
+            password_confirmation: this.password_confirmation,
           },
           {
-            timeout: 30000
+            timeout: 30000,
           }
         );
 
-        this.notifyVue('top', 'center', 'Senha alterada', 'success');
+        this.$bvToast.toast('Senha alterada!', {
+          title: 'Sucesso',
+          autoHideDelay: 5000,
+          variant: 'success',
+          solid: true,
+        });
         this.show = false;
-      } catch (error) {
-        this.notifyVue(
-          'top',
-          'center',
-          JSON.stringify(error.response.data),
-          'danger'
-        );
-        this.show = false;
+      } catch (errors) {
+        for (const prop in errors.response.data) {
+          errors.response.data[prop].forEach((element) => {
+            this.$bvToast.toast(element, {
+              title: 'Error',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              solid: true,
+            });
+          });
+        }
       }
-    },
-    notifyVue(verticalAlign, horizontalAlign, message, type) {
-      this.$notify({
-        component: NotificationTemplate,
-        icon: 'fas fa-exclamation-circle',
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        message: message,
-        type: type
-      });
     },
     handleSubmit() {
       this.show = true;
 
       this.activeUser();
       this.$nextTick(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
-<style></style>

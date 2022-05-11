@@ -1,27 +1,19 @@
 <template>
   <div class="container-fluid ml-0 mr-0 pl-0 pr-0">
-    <b-navbar
-      toggleable="md"
-      type="dark"
-      variant="dark"
-      class="rounded-pill px-2 py-0"
-    >
+    <b-navbar toggleable="md" type="dark" variant="dark">
       <b-navbar-nav type="dark" variant="dark">
-        <b-form-group v-slot="{ ariaDescribedby }">
-          <b-form-radio-group
-            v-model="isResident"
-            :options="residentOptions"
-            :aria-describedby="ariaDescribedby"
-            name="radio-inline"
-            button-variant="outline-danger btn-sm"
-            buttons
-          ></b-form-radio-group>
-        </b-form-group>
+        <b-form-radio-group
+          v-model="isResident"
+          :options="residentOptions"
+          name="radio-inline"
+          button-variant="outline-danger btn-sm"
+          buttons
+        ></b-form-radio-group>
       </b-navbar-nav>
     </b-navbar>
     <div class="row">
       <div class="col-lg-4 col-md-6 col-sm-12 card-dashboard">
-        <CardDatasets
+        <CardsDatasets
           ref="cardDatasets"
           :title.sync="locationName"
           :url.sync="url"
@@ -29,12 +21,12 @@
           system="sinasc"
           :params.sync="paramsDatasets"
           @checked="changeDatasets"
-        ></CardDatasets>
+        ></CardsDatasets>
       </div>
       <div class="col-lg-4 col-md-6 col-sm-12 card-dashboard">
         <client-only>
           <BarChartDataset
-            title="Total de óbitos: "
+            title="Total de nascimentos: "
             :datasets.sync="checkedDatasets"
             :location-name.sync="locationName"
           ></BarChartDataset>
@@ -44,7 +36,7 @@
         <client-only>
           <BarChartGrouped
             ref="serieByGrouped"
-            title="Óbitos por sexo: "
+            title="Nascimentos por sexo: "
             :datasets.sync="checkedDatasets"
             :location-name.sync="locationName"
             :params.sync="paramsSerieBySexo"
@@ -56,7 +48,7 @@
         <client-only>
           <LineChart
             ref="serieByMonth"
-            title="Óbitos por mês: "
+            title="Nascimentos por mês: "
             :datasets.sync="checkedDatasets"
             :location-name.sync="locationName"
             :params.sync="paramsSerieByMonth"
@@ -125,6 +117,7 @@ export default {
     },
   },
   created() {
+    this.welcomeMessage();
     this.url = `${this.urlBase}${this.initial}`;
     this.urlSerie = `${this.urlBaseSerie}${this.initial}`;
     this.urlSerieRange = `${this.urlBaseSerieRange}${this.initial}`;
@@ -140,6 +133,9 @@ export default {
   activated() {},
   updated() {},
   methods: {
+    welcomeMessage() {
+      this.$store.commit('layout/CHANGE_NAV_TITLE', 'Tabulações do SINASC');
+    },
     changeLocationState(initial) {
       this.$store.commit(`${this.module}/setInitial`, {
         initial,
@@ -162,7 +158,7 @@ export default {
       this.resetFilters('codmunres');
       this.setAllFilters();
     },
-    async changeDatasets(checkedDatasets) {
+    changeDatasets(checkedDatasets) {
       this.checkedDatasets = checkedDatasets;
     },
     setFilters(params) {

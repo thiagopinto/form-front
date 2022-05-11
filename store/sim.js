@@ -21,5 +21,5 @@ export const mutations = {
   },
   setChaptersCids(state, payload) {
     state.filter_chapters_cids = payload.filter_chapters_cids;
-  }
+  },
 };
