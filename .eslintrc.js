@@ -2,28 +2,31 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser',
+    requireConfigFile: false,
   },
-  extends: [
-    // '@nuxtjs',
-    // 'plugin:prettier/recommended',
-    // 'plugin:nuxt/recommended',
-    'standard',
-    'plugin:vue/essential',
-    '@vue/standard'
-  ],
-  plugins: [
-    //'@vue'
-  ],
+  extends: ['@nuxtjs', 'plugin:nuxt/recommended', 'prettier'],
+  plugins: [],
   // add your custom rules here
   rules: {
     semi: [1, 'always'],
-    'space-before-function-paren': ['error', 'never'],
-    quotes: 'off',
-    'comma-dangle': 'off',
-    allowAsStatement: 0
-  }
+    'no-console': 'off',
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector:
+          "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+        message: 'Unexpected property on console object was called',
+      },
+    ],
+    'vue/multi-word-component-names': [
+      'error',
+      {
+        ignores: [],
+      },
+    ],
+  },
 };
