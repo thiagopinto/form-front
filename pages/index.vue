@@ -23,7 +23,8 @@
           <h1 class="card-title pricing-card-title">Controle</h1>
           <ul class="list-unstyled mt-3 mb-4">
             <li>
-              Controle de distribuição de formulários de declaração de nascido vivo
+              Controle de distribuição de formulários de declaração de nascido
+              vivo
             </li>
           </ul>
           <NuxtLink to="dn" class="btn btn-success"> Ir... </NuxtLink>

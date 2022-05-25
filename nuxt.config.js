@@ -23,6 +23,7 @@ export default {
   plugins: [
     { src: '~plugins/filter' },
     { src: '~/plugins/apexcharts', mode: 'client' },
+    { src: '~/plugins/autocomplete-vue', mode: 'client' },
     { src: '~/plugins/easy-circular-progress', mode: 'client' },
     { src: '~/plugins/vuelayers', mode: 'client' },
     { src: '~/plugins/ol-ext', mode: 'client' },
