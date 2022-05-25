@@ -51,6 +51,12 @@
               SINASC
             </NuxtLink>
           </li>
+          <li class="list-group-item">
+            <NuxtLink to="/datasets" class="item">
+              <b-icon icon="pie-chart"></b-icon>
+              Datasets
+            </NuxtLink>
+          </li>
         </ul>
       </div>
     </transition>

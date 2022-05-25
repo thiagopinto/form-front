@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <UploadFile
+      <InputUploadFile
         resource="dataset"
         :source="source"
         :system="system"
@@ -63,7 +63,7 @@
             </div>
           </div>
         </template>
-      </UploadFile>
+      </InputUploadFile>
     </div>
   </div>
 </template>

@@ -86,6 +86,8 @@ export default {
         },
       },
     ],
+    // https://saintplay.github.io/vue-swatches/guide
+    'vue-swatches/nuxt',
   ],
 
   bootstrapVue: {
@@ -170,5 +172,12 @@ export default {
   router: {
     // linkExactActiveClass: 'active',
     middleware: ['auth'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'datasets-loads',
+        path: '/datasets/load/:source/:system/:initial',
+        component: '~/pages/datasets/_load.vue',
+      });
+    },
   },
 };
