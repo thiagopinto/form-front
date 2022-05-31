@@ -271,8 +271,8 @@ export default {
       },
       paramsDatasetsMat: {
         limit: 20,
-        column_filter_or: ['obitograv', 'obitopuerp', 'obitopuerp'],
-        term_filter_or: ['1', '1', '2'],
+        column_filter_or: ['obitograv', 'obitopuerp'],
+        term_filter_or: ['1', '1'],
       },
       paramsSerieByMonth: {
         per: 'dtobito',
