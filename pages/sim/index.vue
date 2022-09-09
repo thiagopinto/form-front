@@ -2,11 +2,13 @@
   <div class="container-fluid ml-0 mr-0 pl-0 pr-0">
     <b-sidebar id="filters" title="Filtros" width="368px" right shadow>
       <div class="px-3 py-2">
-        <CardsCids
-          :loading.sync="loading"
-          store="sim"
-          @update="setAllFilters"
-        ></CardsCids>
+        <client-only>
+          <CardsCids
+            :loading.sync="loading"
+            store="sim"
+            @update="setAllFilters"
+          ></CardsCids>
+        </client-only>
       </div>
     </b-sidebar>
     <b-navbar toggleable="md" type="dark" variant="dark" class="px-2 py-0">
@@ -27,7 +29,7 @@
       </b-navbar-brand>
     </b-navbar>
     <div class="row">
-      <div class="col-lg-4 col-md-6 col-sm-12 card-dashboard">
+      <div class="col-lg-4 col-md-12 card-dashboard">
         <CardsDatasets
           ref="cardDatasets"
           :title.sync="locationName"

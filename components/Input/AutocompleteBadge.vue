@@ -8,8 +8,8 @@
             :key="badge.id"
             class="badge badge-pill badge-danger h-auto m-1 p-2"
           >
-            <a class="inline-block" @click.prevent="onRemoveBadge(badge)">
-              <b-icon :icon="x - circle" />
+            <a class="inline-block text-light" @click.prevent="onRemoveBadge(badge)">
+              <b-icon icon="x-circle" font-scale="1.5"/>
             </a>
 
             <template v-if="sortingProperty && indexProperty">

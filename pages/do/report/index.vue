@@ -347,9 +347,9 @@ export default {
     },
     async getHealthUnit() {
       this.isBusy = !this.isBusy;
-      const response = await this.$axios.get(
-        `death_certificate_form/report/${this.genPage()}${this.genSearch()}${this.genFilterDate()}`
-      );
+      const response = await this.$axios.get(this.url, {
+        params: this.params,
+      });
       this.listHealthUnit = [];
       await response.data.data.forEach((healthUnit) => {
         healthUnit.percent =
